@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Shaheen Auto Parts - Simple App</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; margin:0; padding:18px;}
+    .card{background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.06);}    
+    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
+    th,td{padding:6px;border:1px solid #eee;text-align:left;}
+    th{background:#fafafa; position:relative;}
+    .edit-btn-col{ position:absolute; top:2px; right:2px; font-size:10px; padding:3px 6px; background:#ff5c5c; color:white; border:none; border-radius:4px; display:none; cursor:pointer; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+<div style="overflow:auto;max-height:520px;">
+  <table id="partsTable">
+    <thead>
+      <tr>
+        <th>ID <button class="edit-btn-col" data-col="id">Edit</button></th>
+        <th>Code <button class="edit-btn-col" data-col="partCode">Edit</button></th>
+        <th>Name <button class="edit-btn-col" data-col="partName">Edit</button></th>
+        <th>Opening <button class="edit-btn-col" data-col="openingStock">Edit</button></th>
+        <th>Today Prod <button class="edit-btn-col" data-col="todayProduction">Edit</button></th>
+        <th>Store Qty <button class="edit-btn-col" data-col="storeQty">Edit</button></th>
+        <th>Welding Qty <button class="edit-btn-col" data-col="weldingQty">Edit</button></th>
+        <th>FG Qty <button class="edit-btn-col" data-col="fgQty">Edit</button></th>
+        <th>Monthly Supply <button class="edit-btn-col" data-col="monthlySupplyOrder">Edit</button></th>
+        <th>AutoOrder <button class="edit-btn-col" data-col="autoOrderToProduction">Edit</button></th>
+        <th>Out/Supply <button class="edit-btn-col" data-col="outStock">Edit</button></th>
+        <th>Final Done <button class="edit-btn-col" data-col="finalDone">Edit</button></th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="bodyArea"></tbody>
+  </table>
+</div>
+
+</div>
+
+<script>
+let user = localStorage.getItem("sapl_user");
+if(user){ user = JSON.parse(user); }
+
+// Show edit buttons only if admin
+if(user && user.role === "admin"){
+  document.querySelectorAll('.edit-btn-col').forEach(btn=> btn.style.display = 'inline-block');
+}
+
+// Load sample rows
+let data = JSON.parse(localStorage.getItem('shaheen_auto_v1'));
+let body = document.getElementById('bodyArea');
+
+(data.parts || []).forEach(p=>{
+  let tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${p.id}</td>
+    <td>${p.partCode}</td>
+    <td><input data-field="partName" value="${p.partName}" disabled /></td>
+    <td><input data-field="openingStock" type="number" value="${p.openingStock}" disabled /></td>
+    <td><input data-field="todayProduction" type="number" value="${p.todayProduction}" disabled /></td>
+    <td>${p.storeQty}</td>
+    <td>${p.weldingQty}</td>
+    <td>${p.fgQty}</td>
+    <td><input data-field="monthlySupplyOrder" type="number" value="${p.monthlySupplyOrder}" disabled /></td>
+    <td>${p.autoOrderToProduction}</td>
+    <td><input data-field="outStock" type="number" value="${p.outStock}" disabled /></td>
+    <td><input data-field="finalDone" type="number" value="${p.finalDone}" disabled /></td>
+    <td><button>Apply->FG</button></td>`;
+  body.appendChild(tr);
+});
+
+// Column unlocker
+let allRows = document.querySelectorAll('#bodyArea tr');
+
+document.querySelectorAll('.edit-btn-col').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    let col = btn.dataset.col;
+    allRows.forEach(r=>{
+      r.querySelectorAll('input').forEach(inp=>{
+        if(inp.dataset.field === col){ inp.disabled = false; }
+      });
+    });
+    alert(col + " column unlocked for editing");
+  });
+});
+</script>
+
+</body>
+</html>
