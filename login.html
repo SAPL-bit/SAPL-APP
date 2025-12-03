@@ -54,3 +54,38 @@
         background: #ff6b81;
         border: none;
         color: white;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 5px;
+    }
+</style>
+</head>
+
+<body>
+    <div class="login-box">
+        <div class="user-icon">👤</div>
+        <h2>Login</h2>
+
+        <input type="text" id="user" placeholder="Username" />
+        <input type="password" id="pass" placeholder="Password" />
+
+        <button onclick="login()">Login</button>
+    </div>
+
+<script>
+function login() {
+    let u = document.getElementById("user").value;
+    let p = document.getElementById("pass").value;
+
+    // ✔ YOUR LOGIN (kamram / 0900)
+    if (u === "kamram" && p === "0900") {
+        window.location.href = "index.html";
+    } else {
+        alert("Incorrect Login");
+    }
+}
+</script>
+
+</body>
+</html>
