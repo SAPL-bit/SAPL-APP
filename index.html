@@ -2,11 +2,34 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Shaheen Auto Parts - Simple App</title>
+  <title>Shaheen Automotive Pvt Ltd</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     body{font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; margin:0; padding:18px;}
     .card{background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.06);}
+    
+    /* NEW HEADER */
+    .top-header{
+      width:100%;
+      background:#0a0a0a;
+      padding:10px 15px;
+      display:flex;
+      align-items:center;
+      gap:15px;
+      margin-bottom:15px;
+      border-radius:6px;
+    }
+    .top-header img{
+      height:40px;
+      border-radius:4px;
+    }
+    .top-header-title{
+      font-size:20px;
+      font-weight:bold;
+      color:white;
+      letter-spacing:1px;
+    }
+
     header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
     h1{font-size:18px;margin:0;}
     .small{font-size:13px;color:#666;}
@@ -25,10 +48,16 @@
   </style>
 </head>
 <body>
+
+  <!-- NEW HEADER -->
+  <div class="top-header">
+    <img src="https://raw.githubusercontent.com/SAPL-bit/SAPL-APP/refs/heads/main/1764832506974.jpg" alt="Logo">
+    <div class="top-header-title">Shaheen Automotive Pvt Ltd</div>
+  </div>
+
   <div class="card" id="app">
     <header>
       <div>
-        <h1>Shaheen Auto Parts — Simple Online Stock</h1>
         <div class="small">Local demo app — runs by double-clicking <code>index.html</code></div>
       </div>
       <div class="right">
@@ -54,45 +83,11 @@
     </div>
 
     <div class="card" id="tableCard">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <div class="small">Parts: <span id="partsCount">0</span></div>
-        <div class="controls">
-          <button id="autoOrderBtn" class="ghost">Auto-Order Adjust</button>
-          <button id="adminPanelBtn" class="ghost" style="display:none">Admin Panel</button>
-        </div>
-      </div>
-
-      <div style="overflow:auto;max-height:520px;">
-        <table id="partsTable">
-          <thead>
-            <tr>
-              <th>ID</th><th>Code</th><th>Name</th><th>Opening</th>
-              <th>Today Prod</th><th>Store Qty</th><th>Welding Qty</th><th>FG Qty</th>
-              <th>Monthly Supply</th><th>AutoOrder</th><th>Out/Supply</th><th>Final Done</th><th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div id="adminPanel" class="admin-panel" style="display:none;">
-        <h4 style="margin:0 0 8px 0">Admin Tools</h4>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <button id="addPartBtn" class="ghost">Add New Part</button>
-          <button id="clearPartsBtn" class="ghost">Delete All Parts</button>
-          <button id="regenBtn" class="ghost">Regenerate sample parts</button>
-        </div>
-        <div class="note">Admin can edit any field inline. Changes save automatically.</div>
-      </div>
-
-    </div>
-
-    <div class="note">How to use: Login with a department, work on only allowed fields. Data is saved to your browser (localStorage). For real online sync, we can integrate Firebase — I can help.</div>
-  </div>
-
-<script>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin
+        <script>
 (function(){
   const LS_KEY = 'shaheen_auto_v1';
-  const PART_COUNT = 200; // sample parts
+  const PART_COUNT = 200;
 
   const users = [
     {username:'production', label:'Production House', password:'prod123', role:'production'},
@@ -102,7 +97,6 @@
     {username:'admin', label:'Administrator', password:'admin123', role:'admin'}
   ];
 
-  // roles: which fields editable
   const roleEditable = {
     production: ['todayProduction','finalDone'],
     store: ['outStock'],
@@ -111,8 +105,6 @@
     admin: ['partName','openingStock','todayProduction','storeQty','weldingQty','fgQty','monthlySupplyOrder','outStock','finalDone']
   };
 
-
-  // initialize sample data
   function generateParts(n){
     const arr=[];
     for(let i=1;i<=n;i++){
@@ -134,7 +126,6 @@
     return arr;
   }
 
-  // load/save
   function loadData(){
     try{
       const raw = localStorage.getItem(LS_KEY);
@@ -151,8 +142,6 @@
   let state = loadData();
   let currentUser = null;
 
-
-  // DOM refs
   const userSelect = document.getElementById('userSelect');
   const pwdInput = document.getElementById('pwd');
   const loginBtn = document.getElementById('loginBtn');
@@ -174,7 +163,6 @@
   const loginBox = document.getElementById('loginBox');
   const resetSample = document.getElementById('resetSample');
 
-
   function populateUserSelect(){
     userSelect.innerHTML = '';
     users.forEach(u=>{
@@ -184,7 +172,6 @@
       userSelect.appendChild(opt);
     });
   }
-
 
   function renderTable(){
     const q = searchInput.value.trim().toLowerCase();
@@ -211,7 +198,7 @@
         <td><input data-id="${p.id}" data-field="finalDone" type="number" value="${p.finalDone}" /></td>
         <td><button class="applyFinal" data-id="${p.id}">Apply->FG</button></td>
       `;
-      // disable inputs based on role
+
       tr.querySelectorAll('input').forEach(inp=>{
         const field = inp.dataset.field;
         if(currentUser.role!=='admin' && !roleEditable[currentUser.role].includes(field)){
@@ -227,16 +214,12 @@
     partsCount.textContent = rows.length;
   }
 
-
-  // escape HTML
   function escapeHtml(str){
     return str.replace(/[&<>"']/g,m=>({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'
     }[m]));
   }
 
-
-  // EVENT: table change
   partsTableBody.addEventListener('input', e=>{
     const inp = e.target;
     if(!inp.dataset.id) return;
@@ -250,8 +233,6 @@
     saveData(state);
   });
 
-
-  // EVENT: Apply final to FG
   partsTableBody.addEventListener('click', e=>{
     if(e.target.classList.contains('applyFinal')){
       const id = Number(e.target.dataset.id);
@@ -265,8 +246,6 @@
     }
   });
 
-
-  // login
   loginBtn.addEventListener('click', ()=>{
     const u = users.find(x=>x.username===userSelect.value);
     if(!u) return alert("User not found");
@@ -291,8 +270,6 @@
     renderTable();
   });
 
-
-  // logout
   logoutBtn.addEventListener('click', ()=>{
     currentUser = null;
     loggedAs.textContent = "Not logged in";
@@ -302,13 +279,10 @@
     renderTable();
   });
 
-
   adminPanelBtn.addEventListener('click', ()=>{
     adminPanel.style.display = adminPanel.style.display==='none'?'block':'none';
   });
 
-
-  // add new part
   addPartBtn.addEventListener('click', ()=>{
     const id = state.parts.length? (Math.max(...state.parts.map(x=>x.id))+1):1;
     state.parts.push({
@@ -329,8 +303,6 @@
     renderTable();
   });
 
-
-  // clear all parts
   clearPartsBtn.addEventListener('click', ()=>{
     if(confirm("Delete ALL parts?")){
       state.parts = [];
@@ -339,8 +311,6 @@
     }
   });
 
-
-  // regenerate sample
   regenBtn.addEventListener('click', ()=>{
     if(confirm("Recreate sample 200 parts?")){
       state.parts = generateParts(PART_COUNT);
@@ -349,7 +319,6 @@
     }
   });
 
-  // reset sample login box button
   resetSample.addEventListener('click', ()=>{
     if(confirm("Reset everything to sample data?")){
       state = {company:'Shaheen Auto Parts', parts:generateParts(PART_COUNT)};
@@ -358,13 +327,9 @@
     }
   });
 
-
-  // search + refresh
   refreshBtn.addEventListener('click', renderTable);
   searchInput.addEventListener('input', renderTable);
 
-
-  // export CSV
   exportBtn.addEventListener('click', ()=>{
     let csv = "ID,Code,Name,Opening,TodayProd,Store,Wel,FG,Monthly,AutoOrd,Out,Final\n";
     state.parts.forEach(p=>{
@@ -382,12 +347,11 @@
     a.click();
   });
 
-
-  // initial
   populateUserSelect();
   renderTable();
 
 })();
 </script>
+
 </body>
 </html>
