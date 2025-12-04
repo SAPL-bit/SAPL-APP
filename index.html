@@ -1,114 +1,121 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Shaheen Auto Parts - Simple App</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{font-family: Arial, Helvetica, sans-serif; background:#f4f4f4; margin:0; padding:0;}
-.card{background:#fff; padding:14px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin:20px;}
-table{width:100%;border-collapse:collapse;margin-top:10px;}
-th,td{padding:6px;border:1px solid #eee;text-align:center;font-size:14px;}
-th{background:#fafafa;}
-.edit-btn-col{ position:absolute; top:2px; right:4px; cursor:pointer; background:#4697ff; color:white; padding:4px 7px; border-radius:4px; font-size:14px; }
-.dept-btn{ padding:10px 14px; margin:5px; background:#666; color:white; border-radius:6px; display:inline-block; cursor:pointer; }
-.active{ background:#3d3d3d !important; }
-#search{ width:100%; padding:10px; border-radius:8px; border:1px solid #bbb; }
-#loginBox{ max-width:400px; margin:auto; margin-top:80px; padding:25px; background:white; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2); text-align:center; }
-.btn{ padding:10px 14px; background:#4697ff; color:white; border-radius:6px; border:none; cursor:pointer; }
-</style>
+  <meta charset="utf-8" />
+  <title>Shaheen Auto Parts - Simple App</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; margin:0; padding:18px;}
+    .card{background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.06);}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+    h1{font-size:18px;margin:0;}
+    .small{font-size:13px;color:#666;}
+    select,input[type=text],input[type=password],input[type=number]{padding:6px;border:1px solid #ddd;border-radius:6px;}
+    button{padding:7px 10px;border-radius:6px;border:0;background:#0366d6;color:#fff;cursor:pointer;}
+    button.ghost{background:#eee;color:#222;}
+    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
+    th,td{padding:6px;border:1px solid #eee;text-align:left;}
+    th{background:#fafafa;}
+    .muted{color:#888;}
+    .controls{display:flex;gap:8px;align-items:center;}
+    .right{display:flex;gap:8px;align-items:center;}
+    .admin-panel{margin-top:12px;padding:10px;border-radius:6px;background:#fbfbfb;border:1px solid #efefef;}
+    .link{background:none;border:0;color:#0366d6;text-decoration:underline;cursor:pointer;padding:0;}
+    .note{font-size:12px;color:#555;margin-top:8px;}
+    input[type=number]{width:80px;}
+  </style>
 </head>
-
 <body>
+  <div class="card" id="app">
+    <header>
+      <div>
+        <h1>Shaheen Auto Parts — Simple Online Stock</h1>
+        <div class="small">Local demo app — runs by double-clicking <code>index.html</code></div>
+      </div>
+      <div class="right">
+        <div id="loggedAs" class="small muted">Not logged in</div>
+        <button id="logoutBtn" style="display:none">Logout</button>
+      </div>
+    </header>
 
-<div id="loginBox">
-<h2>Login</h2>
-<input type="text" id="user" placeholder="Username" style="width:90%; padding:10px;"><br><br>
-<input type="password" id="pass" placeholder="Password" style="width:90%; padding:10px;"><br><br>
-<button class="btn" onclick="login()">Login</button>
-</div>
+    <div id="loginBox" class="card" style="margin-bottom:10px;">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="userSelect"></select>
+        <input id="pwd" type="password" placeholder="Password" />
+        <button id="loginBtn">Login</button>
+        <button id="resetSample" class="ghost">Reset sample data</button>
+      </div>
+      <div class="note">Default users: production / store / welding / fg / admin. Passwords are shown in the login dropdown for demo.</div>
+    </div>
 
-<div id="main" style="display:none;">
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <input id="search" type="text" placeholder="Search part code or name" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ddd;" />
+      <button id="refreshBtn" class="ghost">Refresh</button>
+      <button id="exportBtn" class="ghost">Export CSV</button>
+    </div>
 
-<div class="card">
-<h2>SAPL Stock System</h2>
+    <div class="card" id="tableCard">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="small">Parts: <span id="partsCount">0</span></div>
+        <div class="controls">
+          <button id="autoOrderBtn" class="ghost">Auto-Order Adjust</button>
+          <button id="adminPanelBtn" class="ghost" style="display:none">Admin Panel</button>
+        </div>
+      </div>
 
-<div>
-<span class="dept-btn" onclick="setDept('DEPT-1')">DEPT-1</span>
-<span class="dept-btn" onclick="setDept('DEPT-2')">DEPT-2</span>
-<span class="dept-btn" onclick="setDept('DEPT-3')">DEPT-3</span>
-</div>
+      <div style="overflow:auto;max-height:520px;">
+        <table id="partsTable">
+          <thead>
+            <tr>
+              <th>ID</th><th>Code</th><th>Name</th><th>Opening</th>
+              <th>Today Prod</th><th>Store Qty</th><th>Welding Qty</th><th>FG Qty</th>
+              <th>Monthly Supply</th><th>AutoOrder</th><th>Out/Supply</th><th>Final Done</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
 
-<br>
-<input id="search" placeholder="Search..." onkeyup="renderTable()">
+      <div id="adminPanel" class="admin-panel" style="display:none;">
+        <h4 style="margin:0 0 8px 0">Admin Tools</h4>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button id="addPartBtn" class="ghost">Add New Part</button>
+          <button id="clearPartsBtn" class="ghost">Delete All Parts</button>
+          <button id="regenBtn" class="ghost">Regenerate sample parts</button>
+        </div>
+        <div class="note">Admin can edit any field inline. Changes save automatically.</div>
+      </div>
 
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Product</th>
-<th>Opening</th>
-<th>Prod</th>
-<th>FG</th>
-<th>Done</th>
-</tr>
-</thead>
-<tbody id="rows"></tbody>
-</table>
+    </div>
 
-</div>
-
-</div>
+    <div class="note">How to use: Login with a department, work on only allowed fields. Data is saved to your browser (localStorage). For real online sync, we can integrate Firebase — I can help.</div>
+  </div>
 
 <script>
-let dept = "DEPT-1";
-let data = {
-"DEPT-1":[{id:1,name:"P1",open:100,prod:0,fg:50,done:0}],
-"DEPT-2":[{id:2,name:"P2",open:80,prod:0,fg:30,done:0}],
-"DEPT-3":[{id:3,name:"P3",open:60,prod:0,fg:20,done:0}]
-};
+(function(){
+  const LS_KEY = 'shaheen_auto_v1';
+  const PART_COUNT = 200; // sample parts
+  const users = [
+    {username:'production', label:'Production House', password:'prod123', role:'production'},
+    {username:'store', label:'Store', password:'store123', role:'store'},
+    {username:'welding', label:'Welding', password:'weld123', role:'welding'},
+    {username:'fg', label:'FG Store', password:'fg123', role:'fg'},
+    {username:'admin', label:'Administrator', password:'admin123', role:'admin'}
+  ];
 
-function login(){
-let u = document.getElementById("user").value;
-let p = document.getElementById("pass").value;
-if(u=="admin" && p=="1234"){
-document.getElementById("loginBox").style.display="none";
-document.getElementById("main").style.display="block";
-} else { alert("Incorrect Login"); }
-}
+  // roles: which fields editable
+  const roleEditable = {
+    production: ['todayProduction','finalDone'],
+    store: ['outStock'],
+    welding: ['finalDone'],
+    fg: ['outStock'],
+    admin: ['partName','openingStock','todayProduction','storeQty','weldingQty','fgQty','monthlySupplyOrder','outStock','finalDone']
+  };
 
-function setDept(d){
-dept = d;
-renderTable();
-}
-
-function renderTable(){
-let q = document.getElementById("search").value.toLowerCase();
-let tbody = document.getElementById("rows");
-tbody.innerHTML="";
-data[dept]
-.filter(p=>p.name.toLowerCase().includes(q))
-.forEach(p=>{
-tbody.innerHTML+= `
-<tr>
-<td>${p.id}</td>
-<td>${p.name}</td>
-<td>${p.open}</td>
-<td><input type="number" value="${p.prod}" onchange="update(${p.id}, 'prod', this.value)"></td>
-<td>${p.fg}</td>
-<td><input type="number" value="${p.done}" onchange="update(${p.id}, 'done', this.value)"></td>
-</tr>`;
-});
-}
-
-function update(id, field, val) {
-let item = data[dept].find(x=>x.id===id);
-item[field] = Number(val);
-renderTable();
-}
-
-renderTable();
-</script>
-
-</body>
-</html>
+  // initialize sample data
+  function generateParts(n){
+    const arr=[];
+    for(let i=1;i<=n;i++){
+      arr.push({
+        id:i,
+        partCode:`P-${
