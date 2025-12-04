@@ -20,11 +20,11 @@
       border-radius:6px;
     }
     .top-header img{
-    height:70px;
-width:70px;
-object-fit:cover;
-border:2px solid black;
-border-radius:4px;
+        height:70px;
+        width:70px;
+        object-fit:cover;
+        border:2px solid black;
+        border-radius:4px;
     }
     .top-header-title{
       font-size:22px;
@@ -77,7 +77,7 @@ border-radius:4px;
     </div>
 
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-      <input id="search" type="text" placeholder="Search part code or name" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ddd;" />
+      <input id="search" type="text" placeholder="Search part code or name" style="flex:1;padding:8px;border-radius:6px;border:1px solid:#ddd;" />
       <button id="refreshBtn" class="ghost">Refresh</button>
       <button id="exportBtn" class="ghost">Export CSV</button>
     </div>
@@ -286,6 +286,15 @@ border-radius:4px;
     }
 
     currentUser = u;
+
+    /*  ⭐⭐ NEW PART ADDED ⭐⭐  
+        اگر پروڈکشن یوزر login کرے → hdmi.html پر redirect  
+    */
+    if (u.role === "production") {
+        window.location.href = "hdmi.html";
+        return;
+    }
+
     loggedAs.textContent = `Logged in as: ${u.label}`;
     loginBox.style.display='none';
     logoutBtn.style.display='inline-block';
@@ -349,7 +358,7 @@ border-radius:4px;
     }
   });
 
-resetSample.addEventListener('click', ()=>{
+  resetSample.addEventListener('click', ()=>{
     if(confirm("Reset everything to sample data?")){
       state = {company:'Shaheen Auto Parts', parts:generateParts(PART_COUNT)};
       saveData(state);
