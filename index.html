@@ -52,15 +52,13 @@
 
   <!-- FIXED NEW HEADER -->
   <div class="top-header">
-    <img src="https://raw.githubusercontent.com/SAPL-bit/SAPL-APP/refs/heads/main/1764832506974.jpg" alt="Logo">
+    <img src="https://raw.githubusercontent.com/SAPL-bit/SAPL-APP/main/20251204_141647.jpg" alt="Logo">
     <div class="top-header-title">Shaheen Automotive Pvt Ltd</div>
   </div>
 
   <div class="card" id="app">
     <header>
-      <div>
-        <!-- REMOVED "Local demo app" line -->
-      </div>
+      <div></div>
       <div class="right">
         <div id="loggedAs" class="small muted">Not logged in</div>
         <button id="logoutBtn" style="display:none">Logout</button>
@@ -350,7 +348,7 @@
     }
   });
 
-  resetSample.addEventListener('click', ()=>{
+resetSample.addEventListener('click', ()=>{
     if(confirm("Reset everything to sample data?")){
       state = {company:'Shaheen Auto Parts', parts:generateParts(PART_COUNT)};
       saveData(state);
