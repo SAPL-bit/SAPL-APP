@@ -10,122 +10,96 @@
         margin: 0;
         padding: 0;
         font-family: Arial;
-        background: #8a2be2;
+        background: #0a0a0a;
         height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        color: white;
     }
 
-    /* TOP LOGO BAR */
     .top-bar {
         position: absolute;
-        top: 20px;
-        width: 100%;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .logo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: green;
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 15px;
-    }
-
-    .top-logo {
-        width: 55px;
-        height: 55px;
-    }
-
-    .sapl-text {
         font-size: 32px;
         font-weight: bold;
         color: white;
-        letter-spacing: 2px;
+    }
+
+    .sapl-text {
+        margin-top: 5px;
+        font-size: 22px;
+        font-weight: bold;
+        color: green;
     }
 
     .login-box {
-        background: white;
-        padding: 30px;
-        width: 320px;
-        border-radius: 15px;
+        background: #111;
+        padding: 25px;
+        border-radius: 10px;
+        border: 2px solid green;
+        width: 280px;
         text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        margin-top: 60px;
-    }
-
-    .user-icon {
-        width: 80px;
-        height: 80px;
-        background: #b49df1;
-        border-radius: 50%;
-        margin: 0 auto 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 40px;
-        color: white;
     }
 
     input {
-        width: 100%;
+        width: 90%;
         padding: 10px;
         margin: 10px 0;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid green;
+        background: #222;
+        color: white;
     }
 
     button {
         width: 100%;
         padding: 12px;
-        background: #ff6b81;
-        border: none;
+        background: green;
         color: white;
         font-size: 18px;
-        border-radius: 8px;
-        cursor: pointer;
-        margin-top: 5px;
+        border: none;
+        border-radius: 5px;
+        margin-top: 10px;
     }
 </style>
 </head>
 
 <body>
 
-    <!-- TOP LOGO + SAPL -->
-    <div class="top-bar">
-        <div class="sapl-text">SAPL</div>
+<div class="top-bar">
+    <div class="logo">S</div>
+    <div class="sapl-text">SAPL</div>
+</div>
 
-        <!-- Logo SVG (Black + Green) -->
-        <svg class="top-logo" viewBox="0 0 500 500">
-            <circle cx="250" cy="250" r="200" stroke="black" stroke-width="22" fill="none"/>
-            <g fill="black">
-                <rect x="240" y="25" width="20" height="50"/>
-                <rect x="240" y="425" width="20" height="50"/>
-                <rect x="25" y="240" width="50" height="20"/>
-                <rect x="425" y="240" width="50" height="20"/>
-            </g>
-            <path d="M300 150c-70-20-150 25-160 95-5 40 15 75 45 90 10 5 25 3 30-8 6-12-1-25-10-32-18-15-22-45-8-67 20-31 65-45 100-35 13 4 26-3 29-15 3-13-4-23-12-28z"
-            fill="#00A000"/>
-            <path d="M280 210c-25-8-55 5-65 25-7 15-2 32 10 40 6 4 15 3 18-4 3-6 0-13-4-17-8-7-8-20-1-30 10-15 33-22 50-17 7 2 15-2 17-9 2-6-2-12-6-14z"
-            fill="black"/>
-        </svg>
-    </div>
-
-    <!-- LOGIN CARD -->
-    <div class="login-box">
-        <div class="user-icon">👤</div>
-        <h2>Login</h2>
-
-        <input type="text" id="user" placeholder="Username" />
-        <input type="password" id="pass" placeholder="Password" />
-
-        <button onclick="login()">Login</button>
-    </div>
+<div class="login-box">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+</div>
 
 <script>
 function login() {
-    let u = document.getElementById("user").value;
-    let p = document.getElementById("pass").value;
+    let u = document.getElementById("username").value;
+    let p = document.getElementById("password").value;
 
-    // UPDATED LOGIN DETAILS
     if (u === "kamran" && p === "090078601") {
         window.location.href = "index.html";
     } else {
