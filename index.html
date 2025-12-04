@@ -8,7 +8,7 @@
     body{font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; margin:0; padding:18px;}
     .card{background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.06);}
     
-    /* NEW HEADER */
+    /* FIXED HEADER */
     .top-header{
       width:100%;
       background:#0a0a0a;
@@ -20,18 +20,19 @@
       border-radius:6px;
     }
     .top-header img{
-      height:40px;
+      height:60px;
+      width:auto;
+      object-fit:contain;
       border-radius:4px;
     }
     .top-header-title{
-      font-size:20px;
+      font-size:22px;
       font-weight:bold;
       color:white;
       letter-spacing:1px;
     }
 
     header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-    h1{font-size:18px;margin:0;}
     .small{font-size:13px;color:#666;}
     select,input[type=text],input[type=password],input[type=number]{padding:6px;border:1px solid #ddd;border-radius:6px;}
     button{padding:7px 10px;border-radius:6px;border:0;background:#0366d6;color:#fff;cursor:pointer;}
@@ -40,16 +41,16 @@
     th,td{padding:6px;border:1px solid #eee;text-align:left;}
     th{background:#fafafa;}
     .muted{color:#888;}
-    .controls{display:flex;gap:8px;align-items:center;}
     .right{display:flex;gap:8px;align-items:center;}
     .admin-panel{margin-top:12px;padding:10px;border-radius:6px;background:#fbfbfb;border:1px solid #efefef;}
     .note{font-size:12px;color:#555;margin-top:8px;}
     input[type=number]{width:80px;}
   </style>
 </head>
+
 <body>
 
-  <!-- NEW HEADER -->
+  <!-- FIXED NEW HEADER -->
   <div class="top-header">
     <img src="https://raw.githubusercontent.com/SAPL-bit/SAPL-APP/refs/heads/main/1764832506974.jpg" alt="Logo">
     <div class="top-header-title">Shaheen Automotive Pvt Ltd</div>
@@ -58,7 +59,7 @@
   <div class="card" id="app">
     <header>
       <div>
-        <div class="small">Local demo app — runs by double-clicking <code>index.html</code></div>
+        <!-- REMOVED "Local demo app" line -->
       </div>
       <div class="right">
         <div id="loggedAs" class="small muted">Not logged in</div>
@@ -73,7 +74,7 @@
         <button id="loginBtn">Login</button>
         <button id="resetSample" class="ghost">Reset sample data</button>
       </div>
-      <div class="note">Default users: production / store / welding / fg / admin. Passwords are shown in the login dropdown for demo.</div>
+      <div class="note">Default users: production / store / welding / fg / admin.</div>
     </div>
 
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
@@ -83,8 +84,40 @@
     </div>
 
     <div class="card" id="tableCard">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin
-        <script>
+      <table id="partsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Opening</th>
+            <th>TodayProd</th>
+            <th>Store</th>
+            <th>Weld</th>
+            <th>FG</th>
+            <th>Monthly</th>
+            <th>AutoOrd</th>
+            <th>Out</th>
+            <th>Final</th>
+            <th>Apply</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="small muted" style="margin-top:6px;">Total parts: <span id="partsCount">0</span></div>
+    </div>
+
+    <button id="adminPanelBtn" class="ghost" style="margin-top:10px; display:none;">Admin Panel</button>
+
+    <div id="adminPanel" class="admin-panel" style="display:none;">
+      <button id="addPartBtn">Add New Part</button>
+      <button id="clearPartsBtn" class="ghost">Delete All Parts</button>
+      <button id="regenBtn" class="ghost">Generate 200 Sample Parts</button>
+    </div>
+
+  </div>
+
+<script>
 (function(){
   const LS_KEY = 'shaheen_auto_v1';
   const PART_COUNT = 200;
@@ -153,8 +186,6 @@
   const searchInput = document.getElementById('search');
   const refreshBtn = document.getElementById('refreshBtn');
   const exportBtn = document.getElementById('exportBtn');
-  const autoOrderBtn = document.getElementById('autoOrderBtn');
-
   const adminPanelBtn = document.getElementById('adminPanelBtn');
   const adminPanel = document.getElementById('adminPanel');
   const addPartBtn = document.getElementById('addPartBtn');
