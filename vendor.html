@@ -1,1 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vendor Store Sheet</title>
 
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #f4f4f4;
+        font-family: Arial;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 26px;
+        text-transform: uppercase;
+    }
+
+    /* -------------------------
+       FIXED & IMPROVED TABLE
+    ---------------------------*/
+    .table-container {
+        width: 95%;              /* pehle 80% hota hai — ab bada kar diya */
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px #ccc;
+        overflow-x: auto;        /* mobile par scroll safe */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 18px;         /* text thora bada */
+    }
+
+    table th {
+        background: #000;
+        color: white;
+        padding: 12px;
+        font-size: 18px;
+    }
+
+    table td {
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    /* ID Column ko safe rakha */
+    td:first-child,
+    th:first-child {
+        width: 120px;          /* ID cut nahi hoga */
+        white-space: nowrap;
+    }
+</style>
+</head>
+
+<body>
+
+<h2>Vendor Store Sheet</h2>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Vendor Name</th>
+                <th>Store Name</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>001</td>
+                <td>Ali Traders</td>
+                <td>Karachi Store</td>
+                <td>Oil</td>
+                <td>10</td>
+                <td>05-12-2025</td>
+            </tr>
+
+            <tr>
+                <td>002</td>
+                <td>Usman Supplies</td>
+                <td>Lahore Store</td>
+                <td>Filters</td>
+                <td>25</td>
+                <td>05-12-2025</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
