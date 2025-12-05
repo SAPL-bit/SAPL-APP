@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Press Shop Sheet</title>
+
+<style>
+    body {
+        font-family: Calibri, sans-serif;
+        background: #081018;
+        padding: 20px;
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    h2 {
+        text-align: center;
+        color: #66eaff;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00eaff99;
+        font-size: 30px;
+    }
+
+    .top-refresh {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .top-refresh button {
+        padding: 10px 22px;
+        font-size: 17px;
+        background: orange;
+        border: none;
+        color: black;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .table-container {
+        width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.05);
+        table-layout: fixed;
+    }
+
+    th {
+        background: #0099cc;
+        color: black;
+        padding: 10px;
+        font-size: 15px;
+        position: sticky;
+        top: 0;
+        text-align: center;
+    }
+
+    td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        text-align: center;
+        font-size: 15px;
+        word-wrap: break-word;
+    }
+
+    td[contenteditable="true"] {
+        background: rgba(255,255,255,0.15);
+        color: #fff;
+        font-weight: bold;
+    }
+
+    button {
+        padding: 6px 10px;
+        margin: 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+    }
+
+    .btn-sami { background: #ffdddd; color: #c00000; }
+    .btn-fg   { background: #ffe5c4; color: #b45f00; }
+    .btn-pipe { background: #d8ffe0; color: #007a1f; }
+
+</style>
+</head>
+
+<body>
+
+<h2>PRESS SHOP SHEET</h2>
+
+<div class="top-refresh">
+    <button onclick="location.reload()">REFRESH</button>
+</div>
+
+<div class="table-container">
+<table id="pressTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>PART NO</th>
+            <th>PART NAME</th>
+            <th>PART MODEL</th>
+            <th>FG STOCK</th>
+            <th>SAMI STOCK</th>
+            <th>MONTHLY SUPPLY</th>
+            <th>TARGET</th>
+            <th>PRODUCTION FINAL</th>   <!-- EDITABLE -->
+            <th>NG QTY</th>             <!-- EDITABLE -->
+            <th>ACTION</th>
+            <th>DATE</th>
+            <th>TIME</th>
+            <th>ADMIN</th>
+        </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<script>
+    let adminName = "1234";
+
+    function generateRows() {
+        let body = document.getElementById("tableBody");
+
+        for (let i = 1; i <= 500; i++) {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${i}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                <!-- Editable Columns -->
+                <td class="final" contenteditable="true"></td>
+                <td class="ng" contenteditable="true"></td>
+
+                <!-- 3 Buttons -->
+                <td>
+                    <button class="btn-sami" onclick="applyAction(this)">Apply Sami</button>
+                    <button class="btn-fg" onclick="applyAction(this)">Apply FG</button>
+                    <button class="btn-pipe" onclick="applyAction(this)">Apply Pipe</button>
+                </td>
+
+                <td class="autoDate"></td>
+                <td class="autoTime"></td>
+                <td class="autoAdmin"></td>
+            `;
+            body.appendChild(row);
+        }
+    }
+    generateRows();
+
+
+    function applyAction(btn) {
+        let row = btn.closest("tr");
+
+        // Auto Fill Date/Time/Admin
+        row.querySelector(".autoDate").innerText =
+            new Date().toLocaleDateString("en-GB");
+
+        row.querySelector(".autoTime").innerText =
+            new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+
+        row.querySelector(".autoAdmin").innerText = adminName;
+
+        // LOCK editable fields after press
+        row.querySelector(".final").setAttribute("contenteditable", "false");
+        row.querySelector(".ng").setAttribute("contenteditable", "false");
+    }
+
+</script>
+
+</body>
+</html>
