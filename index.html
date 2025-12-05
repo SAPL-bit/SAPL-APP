@@ -1,395 +1,237 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Shaheen Automotive Pvt Ltd</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    body{font-family: Arial, Helvetica, sans-serif; background:#f4f6f8; margin:0; padding:18px;}
-    .card{background:#fff; padding:14px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,.06);}
-    
-    /* FIXED HEADER */
-    .top-header{
-      width:100%;
-      background:#0a0a0a;
-      padding:10px 15px;
-      display:flex;
-      align-items:center;
-      gap:15px;
-      margin-bottom:15px;
-      border-radius:6px;
-    }
-    .top-header img{
-        height:70px;
-        width:70px;
-        object-fit:cover;
-        border:2px solid black;
-        border-radius:4px;
-    }
-    .top-header-title{
-      font-size:22px;
-      font-weight:bold;
-      color:white;
-      letter-spacing:1px;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SAPL Login</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial;
+        background: #0a0a0a;
+        height: 100vh;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-    .small{font-size:13px;color:#666;}
-    select,input[type=text],input[type=password],input[type=number]{padding:6px;border:1px solid #ddd;border-radius:6px;}
-    button{padding:7px 10px;border-radius:6px;border:0;background:#0366d6;color:#fff;cursor:pointer;}
-    button.ghost{background:#eee;color:#222;}
-    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
-    th,td{padding:6px;border:1px solid #eee;text-align:left;}
-    th{background:#fafafa;}
-    .muted{color:#888;}
-    .right{display:flex;gap:8px;align-items:center;}
-    .admin-panel{margin-top:12px;padding:10px;border-radius:6px;background:#fbfbfb;border:1px solid #efefef;}
-    .note{font-size:12px;color:#555;margin-top:8px;}
-    input[type=number]{width:80px;}
-  </style>
+    .header {
+        width: 100%;
+        background: #1a1a1a;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-sizing: border-box;
+        border-bottom: 2px solid #444;
+    }
+
+    .header img {
+        width: 55px;
+        height: auto;
+    }
+
+    .header-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #fff;
+        letter-spacing: 1px;
+    }
+
+    .login-box {
+        margin-top: 25px;
+        background: #1a1a1a;
+        padding: 20px;
+        border-radius: 10px;
+        width: 260px;
+        box-shadow: 0 0 10px #000;
+    }
+
+    select, input {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    table {
+        margin-top: 20px;
+        border-collapse: collapse;
+        width: 96%;
+        color: white;
+    }
+
+    th, td {
+        border: 1px solid #555;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background: #222;
+    }
+
+    .readonly {
+        background: #555 !important;
+        pointer-events: none;
+    }
+
+    button {
+        padding: 8px 12px;
+        background: #222;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+</style>
 </head>
 
 <body>
 
-  <!-- FIXED NEW HEADER -->
-  <div class="top-header">
-    <img src="https://raw.githubusercontent.com/SAPL-bit/SAPL-APP/main/20251204_141647.jpg" alt="Logo">
-    <div class="top-header-title">Shaheen Automotive Pvt Ltd</div>
-  </div>
+<div class="header">
+    <img src="logo.png" />
+    <div class="header-title">Shaheen Automotive Pvt Ltd</div>
+</div>
 
-  <div class="card" id="app">
-    <header>
-      <div></div>
-      <div class="right">
-        <div id="loggedAs" class="small muted">Not logged in</div>
-        <button id="logoutBtn" style="display:none">Logout</button>
-      </div>
-    </header>
+<div class="login-box" id="loginBox">
+    <h3>Login</h3>
+    <select id="userSelect">
+        <option value="" disabled selected>Select User</option>
+        <option value="kamran">Admin (Kamran)</option>
+        <option value="store">Store</option>
+        <option value="welding">Welding</option>
+        <option value="fg">FG</option>
+        <option value="production">Production</option>
+    </select>
 
-    <div id="loginBox" class="card" style="margin-bottom:10px;">
-      <div style="display:flex;gap:8px;align-items:center;">
-        <select id="userSelect"></select>
-        <input id="pwd" type="password" placeholder="Password" />
-        <button id="loginBtn">Login</button>
-        <button id="resetSample" class="ghost">Reset sample data</button>
-      </div>
-      <div class="note">Default users: production / store / welding / fg / admin.</div>
-    </div>
+    <input type="password" id="pwdInput" placeholder="Password" />
+    <button id="loginBtn">Login</button>
+</div>
 
-    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-      <input id="search" type="text" placeholder="Search part code or name" style="flex:1;padding:8px;border-radius:6px;border:1px solid:#ddd;" />
-      <button id="refreshBtn" class="ghost">Refresh</button>
-      <button id="exportBtn" class="ghost">Export CSV</button>
-    </div>
+<div id="loggedAs" style="margin-top:10px;"></div>
+<button id="logoutBtn" style="display:none;">Logout</button>
 
-    <div class="card" id="tableCard">
-      <table id="partsTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Opening</th>
-            <th>TodayProd</th>
-            <th>Store</th>
-            <th>Weld</th>
-            <th>FG</th>
-            <th>Monthly</th>
-            <th>AutoOrd</th>
-            <th>Out</th>
-            <th>Final</th>
-            <th>Apply</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      <div class="small muted" style="margin-top:6px;">Total parts: <span id="partsCount">0</span></div>
-    </div>
-
-    <button id="adminPanelBtn" class="ghost" style="margin-top:10px; display:none;">Admin Panel</button>
-
-    <div id="adminPanel" class="admin-panel" style="display:none;">
-      <button id="addPartBtn">Add New Part</button>
-      <button id="clearPartsBtn" class="ghost">Delete All Parts</button>
-      <button id="regenBtn" class="ghost">Generate 200 Sample Parts</button>
-    </div>
-
-  </div>
+<table id="dataTable" style="display:none;">
+    <thead>
+        <tr>
+            <th>Part Name</th>
+            <th>Today Prod</th>
+            <th>Today Pending</th>
+            <th>Remaining</th>
+            <th>Final Done</th>
+            <th>NG</th>
+            <th>Apply Store</th>
+            <th>Apply FG</th>
+        </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+</table>
 
 <script>
-(function(){
-  const LS_KEY = 'shaheen_auto_v1';
-  const PART_COUNT = 200;
+let users = [
+    { username:"kamran", password:"c", role:"admin", label:"Admin" },
+    { username:"store", password:"s", role:"store", label:"Store" },
+    { username:"welding", password:"w", role:"welding", label:"Welding" },
+    { username:"fg", password:"f", role:"fg", label:"FG" },
+    { username:"production", password:"p", role:"production", label:"Production" }
+];
 
-  const users = [
-    {username:'production', label:'Production House', password:'prod123', role:'production'},
-    {username:'store', label:'Store', password:'store123', role:'store'},
-    {username:'welding', label:'Welding', password:'weld123', role:'welding'},
-    {username:'fg', label:'FG Store', password:'fg123', role:'fg'},
-    {username:'admin', label:'Administrator', password:'admin123', role:'admin'}
-  ];
+let currentUser = null;
 
-  const roleEditable = {
-    production: ['todayProduction','finalDone'],
-    store: ['outStock'],
-    welding: ['finalDone'],
-    fg: ['outStock'],
-    admin: ['partName','openingStock','todayProduction','storeQty','weldingQty','fgQty','monthlySupplyOrder','outStock','finalDone']
-  };
+let parts = JSON.parse(localStorage.getItem("sapldata") || "[]");
 
-  function generateParts(n){
-    const arr=[];
-    for(let i=1;i<=n;i++){
-      arr.push({
-        id:i,
-        partCode:`P-${String(i).padStart(4,'0')}`,
-        partName:`Part ${i}`,
-        openingStock: Math.floor(Math.random()*1000),
-        todayProduction:0,
-        storeQty: Math.floor(Math.random()*200),
-        weldingQty: 0,
-        fgQty: Math.floor(Math.random()*300),
-        monthlySupplyOrder: Math.floor(Math.random()*5000),
-        autoOrderToProduction:0,
-        outStock:0,
-        finalDone:0
-      });
-    }
-    return arr;
-  }
+if(parts.length === 0){
+    parts = [
+        { name:"Part-A", tProd:"", tPend:"", rem:"", fDone:"", ng:"", store:"", fg:"" },
+        { name:"Part-B", tProd:"", tPend:"", rem:"", fDone:"", ng:"", store:"", fg:"" }
+    ];
+}
 
-  function loadData(){
-    try{
-      const raw = localStorage.getItem(LS_KEY);
-      if(raw) return JSON.parse(raw);
-    }catch(e){}
-    return {company:'Shaheen Auto Parts', parts: generateParts(PART_COUNT)};
-  }
+function saveData(){
+    localStorage.setItem("sapldata", JSON.stringify(parts));
+}
 
-  function saveData(obj){
-    localStorage.setItem(LS_KEY, JSON.stringify(obj));
-    window.dispatchEvent(new Event('storage'));
-  }
+function renderTable(){
+    let tbody = document.getElementById("tbody");
+    tbody.innerHTML = "";
 
-  let state = loadData();
-  let currentUser = null;
+    parts.forEach((p,i)=>{
+        let tr = document.createElement("tr");
 
-  const userSelect = document.getElementById('userSelect');
-  const pwdInput = document.getElementById('pwd');
-  const loginBtn = document.getElementById('loginBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const loggedAs = document.getElementById('loggedAs');
+        tr.innerHTML = `
+            <td>${p.name}</td>
 
-  const partsTableBody = document.querySelector('#partsTable tbody');
-  const partsCount = document.getElementById('partsCount');
-  const searchInput = document.getElementById('search');
-  const refreshBtn = document.getElementById('refreshBtn');
-  const exportBtn = document.getElementById('exportBtn');
-  const adminPanelBtn = document.getElementById('adminPanelBtn');
-  const adminPanel = document.getElementById('adminPanel');
-  const addPartBtn = document.getElementById('addPartBtn');
-  const clearPartsBtn = document.getElementById('clearPartsBtn');
-  const regenBtn = document.getElementById('regenBtn');
-  const loginBox = document.getElementById('loginBox');
-  const resetSample = document.getElementById('resetSample');
+            <td><input data-i="${i}" data-k="tProd" value="${p.tProd}"></td>
+            <td><input data-i="${i}" data-k="tPend" value="${p.tPend}"></td>
+            <td><input data-i="${i}" data-k="rem" value="${p.rem}"></td>
 
-  function populateUserSelect(){
-    userSelect.innerHTML = '';
-    users.forEach(u=>{
-      const opt = document.createElement('option');
-      opt.value = u.username;
-      opt.textContent = `${u.label} (${u.username} / ${u.password})`;
-      userSelect.appendChild(opt);
-    });
-  }
+            <td><input data-i="${i}" data-k="fDone" value="${p.fDone}"></td>
+            <td><input data-i="${i}" data-k="ng" value="${p.ng}"></td>
 
-  function renderTable(){
-    const q = searchInput.value.trim().toLowerCase();
-    const rows = state.parts.filter(p =>
-      (!q) || p.partCode.toLowerCase().includes(q) || p.partName.toLowerCase().includes(q)
-    );
+            <td><input data-i="${i}" data-k="store" value="${p.store}"></td>
+            <td><input data-i="${i}" data-k="fg" value="${p.fg}"></td>
+        `;
 
-    partsTableBody.innerHTML = '';
-    rows.forEach(p=>{
-      const tr = document.createElement('tr');
-
-      tr.innerHTML = `
-        <td>${p.id}</td>
-        <td>${p.partCode}</td>
-        <td><input data-id="${p.id}" data-field="partName" value="${escapeHtml(p.partName)}" /></td>
-        <td><input data-id="${p.id}" data-field="openingStock" type="number" value="${p.openingStock}" /></td>
-        <td><input data-id="${p.id}" data-field="todayProduction" type="number" value="${p.todayProduction}" /></td>
-        <td>${p.storeQty}</td>
-        <td>${p.weldingQty}</td>
-        <td>${p.fgQty}</td>
-        <td><input data-id="${p.id}" data-field="monthlySupplyOrder" type="number" value="${p.monthlySupplyOrder}" /></td>
-        <td>${p.autoOrderToProduction || 0}</td>
-        <td><input data-id="${p.id}" data-field="outStock" type="number" value="${p.outStock}" /></td>
-        <td><input data-id="${p.id}" data-field="finalDone" type="number" value="${p.finalDone}" /></td>
-        <td><button class="applyFinal" data-id="${p.id}">Apply->FG</button></td>
-      `;
-
-      tr.querySelectorAll('input').forEach(inp=>{
-        const field = inp.dataset.field;
-        if(currentUser.role!=='admin' && !roleEditable[currentUser.role].includes(field)){
-          inp.disabled = true;
-        }else{
-          inp.disabled = false;
-        }
-      });
-
-      partsTableBody.appendChild(tr);
+        tbody.appendChild(tr);
     });
 
-    partsCount.textContent = rows.length;
-  }
+    applyRoleLock();
+}
 
-  function escapeHtml(str){
-    return str.replace(/[&<>"']/g,m=>({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'
-    }[m]));
-  }
+function applyRoleLock(){
+    let allInputs = document.querySelectorAll("tbody input");
 
-  partsTableBody.addEventListener('input', e=>{
-    const inp = e.target;
-    if(!inp.dataset.id) return;
-    const id = Number(inp.dataset.id);
-    const field = inp.dataset.field;
+    allInputs.forEach(inp=>{
+        inp.classList.remove("readonly");
+        inp.readOnly = false;
+    });
 
-    const part = state.parts.find(p=>p.id===id);
-    if(!part) return;
+    if(!currentUser) return;
 
-    part[field] = (inp.type==='number'? Number(inp.value): inp.value);
-    saveData(state);
-  });
-
-  partsTableBody.addEventListener('click', e=>{
-    if(e.target.classList.contains('applyFinal')){
-      const id = Number(e.target.dataset.id);
-      const p = state.parts.find(x=>x.id===id);
-      if(!p) return;
-
-      p.fgQty += p.finalDone;
-      p.finalDone = 0;
-      saveData(state);
-      renderTable();
+    if(currentUser.role === "production"){
+        lock("tProd");
+        lock("tPend");
+        lock("rem");
+        // FinalDone, NG, ApplyStore, ApplyFG remain ACTIVE
     }
-  });
+}
 
-  loginBtn.addEventListener('click', ()=>{
-    const u = users.find(x=>x.username===userSelect.value);
+function lock(col){
+    document.querySelectorAll(`input[data-k="${col}"]`).forEach(inp=>{
+        inp.classList.add("readonly");
+        inp.readOnly = true;
+    });
+}
+
+document.getElementById("tbody").addEventListener("input", e=>{
+    let i = e.target.dataset.i;
+    let k = e.target.dataset.k;
+    parts[i][k] = e.target.value;
+    saveData();
+});
+
+document.getElementById("loginBtn").addEventListener("click", ()=>{
+    const u = users.find(x => x.username === userSelect.value);
+
     if(!u) return alert("User not found");
-
-    if(pwdInput.value !== u.password){
-      alert("Wrong password");
-      return;
-    }
+    if(pwdInput.value !== u.password) return alert("Wrong Password");
 
     currentUser = u;
-
-    /*  ⭐⭐ NEW PART ADDED ⭐⭐  
-        اگر پروڈکشن یوزر login کرے → hdmi.html پر redirect  
-    */
-    if (u.role === "production") {
-        window.location.href = "hdmi.html";
-        return;
-    }
-
-    loggedAs.textContent = `Logged in as: ${u.label}`;
-    loginBox.style.display='none';
-    logoutBtn.style.display='inline-block';
-
-    if(u.role==='admin'){
-      adminPanelBtn.style.display='inline-block';
-    }else{
-      adminPanelBtn.style.display='none';
-      adminPanel.style.display='none';
-    }
+    loginBox.style.display="none";
+    dataTable.style.display="table";
+    logoutBtn.style.display="block";
+    loggedAs.textContent = "Logged in as: " + u.label;
 
     renderTable();
-  });
+});
 
-  logoutBtn.addEventListener('click', ()=>{
-    currentUser = null;
-    loggedAs.textContent = "Not logged in";
-    loginBox.style.display='block';
-    logoutBtn.style.display='none';
-    adminPanel.style.display='none';
-    renderTable();
-  });
-
-  adminPanelBtn.addEventListener('click', ()=>{
-    adminPanel.style.display = adminPanel.style.display==='none'?'block':'none';
-  });
-
-  addPartBtn.addEventListener('click', ()=>{
-    const id = state.parts.length? (Math.max(...state.parts.map(x=>x.id))+1):1;
-    state.parts.push({
-      id,
-      partCode:`P-${String(id).padStart(4,'0')}`,
-      partName:`Part ${id}`,
-      openingStock:0,
-      todayProduction:0,
-      storeQty:0,
-      weldingQty:0,
-      fgQty:0,
-      monthlySupplyOrder:0,
-      autoOrderToProduction:0,
-      outStock:0,
-      finalDone:0
-    });
-    saveData(state);
-    renderTable();
-  });
-
-  clearPartsBtn.addEventListener('click', ()=>{
-    if(confirm("Delete ALL parts?")){
-      state.parts = [];
-      saveData(state);
-      renderTable();
-    }
-  });
-
-  regenBtn.addEventListener('click', ()=>{
-    if(confirm("Recreate sample 200 parts?")){
-      state.parts = generateParts(PART_COUNT);
-      saveData(state);
-      renderTable();
-    }
-  });
-
-  resetSample.addEventListener('click', ()=>{
-    if(confirm("Reset everything to sample data?")){
-      state = {company:'Shaheen Auto Parts', parts:generateParts(PART_COUNT)};
-      saveData(state);
-      renderTable();
-    }
-  });
-
-  refreshBtn.addEventListener('click', renderTable);
-  searchInput.addEventListener('input', renderTable);
-
-  exportBtn.addEventListener('click', ()=>{
-    let csv = "ID,Code,Name,Opening,TodayProd,Store,Wel,FG,Monthly,AutoOrd,Out,Final\n";
-    state.parts.forEach(p=>{
-      csv += [
-        p.id,p.partCode,p.partName,p.openingStock,p.todayProduction,
-        p.storeQty,p.weldingQty,p.fgQty,p.monthlySupplyOrder,p.autoOrderToProduction,
-        p.outStock,p.finalDone
-      ].join(',') + "\n";
-    });
-
-    const blob = new Blob([csv],{type:'text/csv'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = "parts.csv";
-    a.click();
-  });
-
-  populateUserSelect();
-  renderTable();
-
-})();
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    location.reload();
+});
 </script>
 
 </body>
