@@ -1,1 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Store Sheet</title>
 
+<style>
+    body {
+        font-family: Calibri, sans-serif;
+        background: #081018;
+        padding: 20px;
+        color: #fff;
+    }
+
+    h2 {
+        text-align: center;
+        color: #66eaff;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00eaff99;
+    }
+
+    /* TOP REFRESH BUTTON */
+    .top-refresh {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .top-refresh button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background: orange;
+        border: none;
+        color: black;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .search-box {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 90%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    th {
+        background: #0099cc;
+        padding: 10px;
+        border: none;
+        color: black;
+        font-weight: bold;
+        font-size: 14px;
+        position: sticky;
+        top: 0;
+    }
+
+    td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-align: center;
+        font-size: 13px;
+    }
+
+    tr:hover {
+        background: rgba(255,255,255,0.08);
+    }
+
+    td[contenteditable="true"] {
+        background: rgba(255,255,255,0.07);
+        color: #fff;
+        border-radius: 4px;
+    }
+
+    button {
+        padding: 5px 10px;
+        margin: 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .btn-sami {
+        background: #ffdddd;
+        color: #c00000;
+    }
+
+    .btn-fg {
+        background: #ffe5c4;
+        color: #b45f00;
+    }
+</style>
+</head>
+
+<body>
+
+<h2>Vendor Store Sheet</h2>
+
+<!-- TOP REFRESH BUTTON -->
+<div class="top-refresh">
+    <button onclick="location.reload()">REFRESH</button>
+</div>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by ID, Part No, Part Name...">
+</div>
+
+<table id="vendorTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>PART NO</th>
+            <th>PART NAME</th>
+            <th>PART MODEL</th>
+            <th>VENDOR NAME</th>
+            <th>STOCK QTY</th>
+            <th>SAMI STORE</th>
+            <th>FG STORE</th>
+            <th>AUTO DATE</th>
+            <th>AUTO TIME</th>
+            <th>ADMIN</th>
+        </tr>
+    </thead>
+
+    <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+    let adminName = "1234";
+
+    function generateRows() {
+        let body = document.getElementById("tableBody");
+
+        for (let i = 1; i <= 500; i++) {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${i}</td>
+
+                <!-- LOCKED COLUMNS -->
+                <td></td>
+                <td></td>
+                <td></td>
+
+                <!-- Editable -->
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+
+                <td><button class="btn-sami" onclick="applyAction(this)">Apply Sami</button></td>
+                <td><button class="btn-fg" onclick="applyAction(this)">Apply FG</button></td>
+
+                <td class="autoDate"></td>
+                <td class="autoTime"></td>
+                <td class="autoAdmin"></td>
+            `;
+
+            body.appendChild(row);
+        }
+    }
+
+    generateRows();
+
+    function applyAction(btn) {
+        let row = btn.closest("tr");
+
+        row.querySelector(".autoDate").innerText =
+            new Date().toLocaleDateString("en-GB");
+
+        row.querySelector(".autoTime").innerText =
+            new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+        row.querySelector(".autoAdmin").innerText = adminName;
+    }
+
+    // SEARCH SYSTEM
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#vendorTable tbody tr");
+
+        rows.forEach(row => {
+            let id = row.children[0].innerText.toLowerCase();
+            let partNo = row.children[1].innerText.toLowerCase();
+            let partName = row.children[2].innerText.toLowerCase();
+
+            if (id.includes(value) || partNo.includes(value) || partName.includes(value)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
