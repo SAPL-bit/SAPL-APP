@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAMI STORE SHEET</title>
+
+<style>
+    body {
+        font-family: Calibri, sans-serif;
+        background: #081018;
+        padding: 20px;
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    h2 {
+        text-align: center;
+        color: #66eaff;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00eaff99;
+        font-size: 30px;
+    }
+
+    /* REFRESH BUTTON */
+    .top-refresh {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .top-refresh button {
+        padding: 10px 22px;
+        font-size: 17px;
+        background: orange;
+        border: none;
+        color: black;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* SEARCH BOX */
+    .search-box {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 95%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 18px;
+    }
+
+    /* TABLE DESIGN */
+    .table-container {
+        width: 100%;
+        margin: auto;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.05);
+        table-layout: fixed;
+    }
+
+    th {
+        background: #0099cc;
+        color: black;
+        padding: 10px;
+        font-size: 15px;
+        position: sticky;
+        top: 0;
+        text-align: center;
+    }
+
+    td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        text-align: center;
+        font-size: 15px;
+        word-wrap: break-word;
+    }
+
+    td[contenteditable="true"] {
+        background: rgba(255,255,255,0.08);
+        color: white;
+    }
+
+    .btn-weld {
+        background: #ffdede;
+        color: #b40000;
+        font-weight: bold;
+        border-radius: 6px;
+        padding: 6px 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-fg {
+        background: #ffe9c9;
+        color: #b45f00;
+        font-weight: bold;
+        border-radius: 6px;
+        padding: 6px 10px;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<h2>SAMI STORE SHEET</h2>
+
+<!-- REFRESH -->
+<div class="top-refresh">
+    <button onclick="location.reload()">REFRESH</button>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by ID, Part No, Part Name...">
+</div>
+
+<!-- TABLE -->
+<div class="table-container">
+<table id="samiTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>PART NO</th>
+            <th>PART NAME</th>
+            <th>PART MODEL</th>
+            <th>OPENING STOCK</th>
+            <th>FG STOCK</th>
+            <th>STOCK OUT</th>
+            <th>NG QTY</th>
+            <th>REMAINING STOCK</th>
+            <th>APPLY WELDING</th>
+            <th>APPLY FG</th>
+            <th>AUTO DATE</th>
+            <th>AUTO TIME</th>
+            <th>ADMIN</th>
+        </tr>
+    </thead>
+
+    <tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<script>
+    let adminName = "1234";
+
+    function generateRows() {
+        let body = document.getElementById("tableBody");
+
+        for (let i = 1; i <= 500; i++) {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${i}</td>
+
+                <!-- LOCKED FIELDS -->
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                <!-- ONLY THESE TWO OPEN -->
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+
+                <!-- LOCKED CALCULATED FIELD -->
+                <td></td>
+
+                <!-- BUTTONS -->
+                <td><button class="btn-weld" onclick="applyAction(this)">WELD</button></td>
+                <td><button class="btn-fg" onclick="applyAction(this)">FG</button></td>
+
+                <td class="autoDate"></td>
+                <td class="autoTime"></td>
+                <td class="autoAdmin"></td>
+            `;
+            body.appendChild(row);
+        }
+    }
+    generateRows();
+
+    /* AUTO DATE / TIME / ADMIN */
+    function applyAction(btn) {
+        let row = btn.closest("tr");
+
+        // When pressed → buttons hide
+        row.querySelector(".btn-weld").style.display = "none";
+        row.querySelector(".btn-fg").style.display = "none";
+
+        row.querySelector(".autoDate").innerText =
+            new Date().toLocaleDateString("en-GB");
+
+        row.querySelector(".autoTime").innerText =
+            new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+
+        row.querySelector(".autoAdmin").innerText = adminName;
+    }
+
+    /* SEARCH SYSTEM */
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#samiTable tbody tr");
+
+        rows.forEach(row => {
+            let id = row.children[0].innerText.toLowerCase();
+            let partNo = row.children[1].innerText.toLowerCase();
+            let partName = row.children[2].innerText.toLowerCase();
+
+            if (id.includes(value) || partNo.includes(value) || partName.includes(value)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
