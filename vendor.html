@@ -1,61 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vendor Store Sheet</title>
 
 <style>
     body {
-        margin: 0;
-        padding: 0;
-        background: #f4f4f4;
-        font-family: Arial;
+        font-family: Calibri, sans-serif;
+        background: #081018;
+        padding: 20px;
+        color: #fff;
     }
 
     h2 {
         text-align: center;
-        margin-top: 20px;
-        font-size: 26px;
-        text-transform: uppercase;
+        color: #66eaff;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00eaff99;
     }
 
-    /* -------------------------
-       FIXED & IMPROVED TABLE
-    ---------------------------*/
+    /* TOP REFRESH BUTTON */
+    .top-refresh {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .top-refresh button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background: orange;
+        border: none;
+        color: black;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .search-box {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 95%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 18px;
+    }
+
+    /* TABLE CONTAINER BIGGER */
     .table-container {
-        width: 95%;              /* pehle 80% hota hai — ab bada kar diya */
-        margin: 20px auto;
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 0 10px #ccc;
-        overflow-x: auto;        /* mobile par scroll safe */
+        width: 98%;
+        margin: auto;
+        max-height: 80vh;
+        overflow-y: scroll;
+        border-radius: 10px;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 18px;         /* text thora bada */
+        background: rgba(255,255,255,0.05);
     }
 
-    table th {
-        background: #000;
-        color: white;
-        padding: 12px;
-        font-size: 18px;
-    }
-
-    table td {
+    th {
+        background: #0099cc;
+        color: black;
         padding: 10px;
-        border: 1px solid #ccc;
+        font-size: 16px;
+        position: sticky;
+        top: 0;
     }
 
-    /* ID Column ko safe rakha */
-    td:first-child,
-    th:first-child {
-        width: 120px;          /* ID cut nahi hoga */
-        white-space: nowrap;
+    td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        text-align: center;
+        font-size: 15px;
+    }
+
+    td[contenteditable="true"] {
+        background: rgba(255,255,255,0.07);
+        color: white;
+    }
+
+    button {
+        padding: 5px 10px;
+        margin: 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+    }
+
+    .btn-sami {
+        background: #ffdddd;
+        color: #c00000;
+    }
+
+    .btn-fg {
+        background: #ffe5c4;
+        color: #b45f00;
     }
 </style>
 </head>
@@ -64,40 +110,96 @@
 
 <h2>Vendor Store Sheet</h2>
 
-<div class="table-container">
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Vendor Name</th>
-                <th>Store Name</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr>
-                <td>001</td>
-                <td>Ali Traders</td>
-                <td>Karachi Store</td>
-                <td>Oil</td>
-                <td>10</td>
-                <td>05-12-2025</td>
-            </tr>
-
-            <tr>
-                <td>002</td>
-                <td>Usman Supplies</td>
-                <td>Lahore Store</td>
-                <td>Filters</td>
-                <td>25</td>
-                <td>05-12-2025</td>
-            </tr>
-        </tbody>
-    </table>
+<!-- TOP REFRESH BUTTON -->
+<div class="top-refresh">
+    <button onclick="location.reload()">REFRESH</button>
 </div>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by ID, Part No, Part Name...">
+</div>
+
+<div class="table-container">
+<table id="vendorTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>PART NO</th>
+            <th>PART NAME</th>
+            <th>PART MODEL</th>
+            <th>VENDOR NAME</th>
+            <th>STOCK QTY</th>
+            <th>SAMI STORE</th>
+            <th>FG STORE</th>
+            <th>AUTO DATE</th>
+            <th>AUTO TIME</th>
+            <th>ADMIN</th>
+        </tr>
+    </thead>
+
+    <tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<script>
+    let adminName = "1234";
+
+    function generateRows() {
+        let body = document.getElementById("tableBody");
+
+        for (let i = 1; i <= 500; i++) {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${i}</td>
+
+                <!-- Locked Columns -->
+                <td></td>
+                <td></td>
+                <td></td>
+
+                <!-- Editable -->
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+
+                <td><button class="btn-sami" onclick="applyAction(this)">Apply Sami</button></td>
+                <td><button class="btn-fg" onclick="applyAction(this)">Apply FG</button></td>
+
+                <td class="autoDate"></td>
+                <td class="autoTime"></td>
+                <td class="autoAdmin"></td>
+            `;
+            body.appendChild(row);
+        }
+    }
+    generateRows();
+
+    function applyAction(btn) {
+        let row = btn.closest("tr");
+
+        row.querySelector(".autoDate").innerText = new Date().toLocaleDateString("en-GB");
+        row.querySelector(".autoTime").innerText = new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+        row.querySelector(".autoAdmin").innerText = adminName;
+    }
+
+    // SEARCH
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#vendorTable tbody tr");
+
+        rows.forEach(row => {
+            let id = row.children[0].innerText.toLowerCase();
+            let partNo = row.children[1].innerText.toLowerCase();
+            let partName = row.children[2].innerText.toLowerCase();
+
+            if (id.includes(value) || partNo.includes(value) || partName.includes(value)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
