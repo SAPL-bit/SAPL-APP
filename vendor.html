@@ -2,138 +2,201 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Vendor Stock</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Store Sheet</title>
+
 <style>
     body {
-        font-family: Arial;
-        background: #f2f4f7;
-        margin: 0;
+        font-family: Calibri, sans-serif;
+        background: #081018;
         padding: 20px;
+        color: #fff;
     }
 
-    .top-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+    h2 {
+        text-align: center;
+        color: #66eaff;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px #00eaff99;
+    }
+
+    .search-box {
+        text-align: center;
         margin-bottom: 20px;
     }
 
-    .top-bar input {
-        padding: 8px;
-        width: 220px;
-        border-radius: 6px;
-        border: 1px solid #aaa;
-    }
-
-    .btn {
-        padding: 8px 14px;
+    .search-box input {
+        width: 90%;
+        padding: 12px 15px;
+        border-radius: 8px;
         border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: bold;
+        outline: none;
+        font-size: 16px;
     }
 
-    .btn-refresh { background: #3498db; color: white; }
-    .btn-apply { background: #27ae60; color: white; }
-    
     table {
         width: 100%;
         border-collapse: collapse;
-        background: white;
+        margin-top: 15px;
+        background: rgba(255, 255, 255, 0.04);
         border-radius: 10px;
         overflow: hidden;
     }
 
     th {
-        background: #2c3e50;
-        color: white;
+        background: #0099cc;
         padding: 10px;
+        border: none;
+        color: black;
+        font-weight: bold;
+        font-size: 14px;
     }
 
     td {
         padding: 8px;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-align: center;
+        font-size: 13px;
     }
 
-    .locked {
-        background: #e8e8e8;
-        pointer-events: none;
+    tr:hover {
+        background: rgba(255,255,255,0.08);
+    }
+
+    td[contenteditable="true"] {
+        background: rgba(255,255,255,0.07);
+        color: #fff;
+        border-radius: 4px;
+    }
+
+    button {
+        padding: 5px 10px;
+        margin: 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    .btn-sami {
+        background: #ffdddd;
+        color: #c00000;
+    }
+
+    .btn-fg {
+        background: #ffe5c4;
+        color: #b45f00;
+    }
+
+    .refresh-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: orange;
+        border-radius: 8px;
+        font-size: 16px;
+        color: black;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 </style>
 </head>
+
 <body>
 
-<div class="top-bar">
-    <button class="btn btn-refresh" onclick="location.reload()">Refresh</button>
-    <input id="searchBox" onkeyup="searchTable()" placeholder="Search ID / Part No / Name">
+<h2>Vendor Store Sheet</h2>
+
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by ID, Part No, Part Name...">
 </div>
 
 <table id="vendorTable">
     <thead>
         <tr>
             <th>ID</th>
-            <th class="locked">Part No</th>
-            <th class="locked">Part Name</th>
-            <th class="locked">Part Model</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Admin</th>
-            <th>Vendor Name</th>
-            <th>Stock Qty</th>
-            <th>Type</th>
-            <th>Apply</th>
+            <th>PART NO</th>
+            <th>PART NAME</th>
+            <th>PART MODEL</th>
+            <th>VENDOR NAME</th>
+            <th>STOCK QTY</th>
+            <th>SAMI STORE</th>
+            <th>FG STORE</th>
+            <th>AUTO DATE</th>
+            <th>AUTO TIME</th>
+            <th>ADMIN</th>
         </tr>
     </thead>
-    <tbody>
-        <!-- Auto generate 500 rows -->
-        <script>
-            for (let i = 1; i <= 500; i++) {
-                document.write(`
-                <tr>
-                    <td>${i}</td>
-                    <td class="locked">-</td>
-                    <td class="locked">-</td>
-                    <td class="locked">-</td>
 
-                    <td><span id="date${i}">-</span></td>
-                    <td><span id="time${i}">-</span></td>
-                    <td><span id="admin${i}">-</span></td>
-
-                    <td contenteditable="true"></td>
-                    <td contenteditable="true"></td>
-                    <td contenteditable="true"></td>
-
-                    <td><button class="btn btn-apply" onclick="applyRow(${i})">Apply</button></td>
-                </tr>
-                `);
-            }
-
-            function applyRow(id) {
-                let now = new Date();
-                document.getElementById("date" + id).innerText =
-                    now.toISOString().split('T')[0];
-
-                document.getElementById("time" + id).innerText =
-                    now.toTimeString().split(' ')[0];
-
-                document.getElementById("admin" + id).innerText = "Admin-1234";
-
-                // stock qty ko ZERO auto
-                document.querySelectorAll(`#vendorTable tr:nth-child(${id + 1}) td`)[8].innerText = "0";
-            }
-
-            function searchTable() {
-                let filter = document.getElementById("searchBox").value.toLowerCase();
-                let rows = document.querySelectorAll("#vendorTable tbody tr");
-
-                rows.forEach(row => {
-                    let text = row.innerText.toLowerCase();
-                    row.style.display = text.includes(filter) ? "" : "none";
-                });
-            }
-        </script>
-    </tbody>
+    <tbody id="tableBody"></tbody>
 </table>
+
+<button class="refresh-btn" onclick="location.reload()">REFRESH</button>
+
+<script>
+    let adminName = "1234";
+
+    // Generate 500 rows
+    function generateRows() {
+        let body = document.getElementById("tableBody");
+
+        for (let i = 1; i <= 500; i++) {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${i}</td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+
+                <td><button class="btn-sami" onclick="applyAction(this)">Apply Sami</button></td>
+                <td><button class="btn-fg" onclick="applyAction(this)">Apply FG</button></td>
+
+                <td class="autoDate"></td>
+                <td class="autoTime"></td>
+                <td class="autoAdmin"></td>
+            `;
+
+            body.appendChild(row);
+        }
+    }
+
+    generateRows();
+
+    // Apply date/time/admin
+    function applyAction(btn) {
+        let row = btn.closest("tr");
+
+        row.querySelector(".autoDate").innerText =
+            new Date().toLocaleDateString("en-GB");
+
+        row.querySelector(".autoTime").innerText =
+            new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+        row.querySelector(".autoAdmin").innerText = adminName;
+    }
+
+    // Live search
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#vendorTable tbody tr");
+
+        rows.forEach(row => {
+            let id = row.children[0].innerText.toLowerCase();
+            let partNo = row.children[1].innerText.toLowerCase();
+            let partName = row.children[2].innerText.toLowerCase();
+
+            if (id.includes(value) || partNo.includes(value) || partName.includes(value)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
