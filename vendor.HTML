@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendor Page</title>
+
+<style>
+    body {
+        font-family: Calibri, sans-serif;
+        background: #0a0a0a;
+        padding: 20px;
+        color: #fff;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #444;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background: #ff8888;
+        font-weight: bold;
+        color: black;
+    }
+
+    .refresh { background: orange; font-weight: bold; }
+    .search { background: skyblue; font-weight: bold; }
+    .type { background: #4da3ff; font-weight: bold; }
+
+    button {
+        padding: 5px 10px;
+        margin: 3px;
+        font-size: 13px;
+        cursor: pointer;
+        border-radius: 4px;
+        border: none;
+    }
+
+    .btn-sami { background: #ffd5d5; color: #c10000; }
+    .btn-fg { background: #ffd5d5; color: #c10000; }
+</style>
+
+</head>
+<body>
+
+<h2>Vendor Store Sheet</h2>
+
+<table id="vendorTable">
+    <tr>
+        <th class="refresh" colspan="4">REFRESH</th>
+        <th class="search" colspan="3">SEARCH</th>
+        <th class="type" colspan="5">TYPE</th>
+    </tr>
+
+    <tr style="background:#ffb6b6; color:black;">
+        <th>ID</th>
+        <th>PART NO.</th>
+        <th>PART NAME</th>
+        <th>PART MODEL</th>
+        <th>VENDOR NAME</th>
+        <th>STOCK QTY</th>
+        <th>MOVE ON</th>
+        <th>MOVE ON</th>
+        <th>AUTO CLICK DATE</th>
+        <th>AUTO CLICK TIME</th>
+        <th>CLICK ADMIN</th>
+    </tr>
+
+    <tr>
+        <td id="idCell">1</td>
+        <td id="partNo">556556</td>
+        <td id="partName">BUMPER</td>
+        <td id="partModel">662B</td>
+
+        <!-- Editable -->
+        <td contenteditable="true" id="vendorName"></td>
+        <td contenteditable="true" id="stockQty"></td>
+
+        <!-- Buttons -->
+        <td><button class="btn-sami" onclick="applySami()">apply sami store</button></td>
+        <td><button class="btn-fg" onclick="applyFG()">apply fg</button></td>
+
+        <!-- Auto Fields -->
+        <td id="autoDate"></td>
+        <td id="autoTime"></td>
+        <td id="autoAdmin"></td>
+    </tr>
+</table>
+
+<br>
+<button onclick="refreshPage()" style="background:orange;color:black;">REFRESH</button>
+
+<script>
+    let adminName = "1234";  // yahan auto login admin set karo
+
+    function applyAction(type) {
+        let qty = document.getElementById("stockQty");
+        qty.textContent = "0";
+
+        let now = new Date();
+
+        document.getElementById("autoDate").textContent =
+            now.toLocaleDateString("en-GB");
+
+        document.getElementById("autoTime").textContent =
+            now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+        document.getElementById("autoAdmin").textContent = adminName;
+    }
+
+    function applySami() {
+        applyAction("sami");
+    }
+
+    function applyFG() {
+        applyAction("fg");
+    }
+
+    function refreshPage() {
+        location.reload();
+    }
+</script>
+
+</body>
+</html>
