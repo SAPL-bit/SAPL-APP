@@ -1,62 +1,193 @@
-<!-- TOP GLASS HEADER -->
-<div class="glass-header">
-    <div class="logo-box">
-        <img src="logo.png" alt="Logo">
-    </div>
-
-    <div class="company-name">
-        SHAHEEN AUTOMOTIVE PVT LTD.
-    </div>
-</div>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Shaheen Automotive — Dashboard</title>
+<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 <style>
-/* Glass Header */
-.glass-header {
-    width: 100%;
-    height: 85px;
-    display: flex;
-    align-items: center;
-    backdrop-filter: blur(14px);
-    background: rgba(255, 255, 255, 0.12);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 10px 25px;
-    gap: 18px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+  :root{
+    --glass-bg: rgba(255,255,255,0.08);
+    --glass-strong: rgba(255,255,255,0.14);
+    --accent: #00eaff;
+    --page-bg: linear-gradient(135deg,#071019 0%, #10252b 50%, #16343a 100%);
+  }
+  html,body{height:100%;margin:0;padding:0;font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", Roboto, Arial; background:var(--page-bg); color:#fff}
+  /* top glass header */
+  .glass-header{
+    width:100%;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:12px 18px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    backdrop-filter:blur(14px) saturate(1.1);
+    background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .logo-box{width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;
+    background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+  .logo-box img{width:100%;height:100%;object-fit:contain;display:block}
+  .title-wrap{display:flex;flex-direction:column;gap:2px}
+  .company-name{
+    font-size:20px;font-weight:700;letter-spacing:0.6px;color:var(--accent);
+    text-shadow:0 6px 30px rgba(0,230,255,0.06), 0 0 10px rgba(0,230,255,0.06);
+  }
+  .company-sub{font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px}
 
-/* Logo Box */
-.logo-box {
-    width: 65px;
-    height: 65px;
-    border-radius: 12px;
-    backdrop-filter: blur(20px);
-    background: rgba(255, 255, 255, 0.18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-}
+  .spacer{flex:1}
 
-.logo-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+  /* logout button */
+  .actions{display:flex;gap:10px;align-items:center}
+  .btn{
+    background:transparent;border:1px solid rgba(255,255,255,0.08);padding:8px 12px;border-radius:10px;color:#fff;cursor:pointer;font-weight:600;
+    backdrop-filter: blur(8px);
+  }
+  .btn.ghost{background:transparent}
+  .btn.danger{border-color:rgba(255,80,80,0.9); color:#ffb3b3}
 
-/* Company Name */
-.company-name {
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: white;
-    text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(20px);
-    padding: 10px 18px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.10);
-    border: 1px solid rgba(255, 255, 255, 0.20);
-}
+  /* main dashboard area */
+  main{max-width:980px;margin:26px auto;padding:18px;box-sizing:border-box}
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+    gap:18px;
+  }
+
+  .card{
+    background:var(--glass-bg);
+    border-radius:16px;
+    padding:18px;
+    text-align:center;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    border:1px solid rgba(255,255,255,0.04);
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:120px;
+  }
+  .card .ico{font-size:40px;margin-bottom:8px;filter:drop-shadow(0 6px 18px rgba(0,0,0,0.6))}
+  .card .label{font-weight:700;font-size:15px;letter-spacing:0.3px}
+  .card:hover{transform:translateY(-6px); background:var(--glass-strong); box-shadow:0 14px 40px rgba(0,0,0,0.6);}
+
+  /* footer small note */
+  .note{margin-top:16px;color:rgba(255,255,255,0.6);font-size:13px;text-align:center}
+
+  /* responsive */
+  @media (max-width:900px){
+    .grid{grid-template-columns: repeat(2, minmax(140px,1fr));}
+  }
+  @media (max-width:520px){
+    .glass-header{padding:10px}
+    .company-name{font-size:16px}
+    .grid{grid-template-columns:repeat(1,1fr)}
+    .card{min-height:100px}
+  }
 </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="glass-header">
+  <div class="logo-box">
+    <!-- use raw github image (if you want local, replace the URL with local file name like logo.png) -->
+    <img id="companyLogo" src="https://raw.githubusercontent.com/SAPL-bit/SAPL-APP/main/20251204_141647.jpg" alt="Shaheen Logo">
+  </div>
+
+  <div class="title-wrap">
+    <div class="company-name">SHAHEEN AUTOMOTIVE PVT LTD.</div>
+    <div class="company-sub">Dashboard</div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="actions">
+    <button id="btnRefresh" class="btn">Refresh</button>
+    <button id="btnLogout" class="btn danger">Logout</button>
+  </div>
+</header>
+
+<!-- Main -->
+<main>
+  <section class="grid" id="folderGrid">
+    <!-- 9 folders -->
+    <div class="card" data-page="vendor.html"><div class="ico">📁</div><div class="label">Vendor</div></div>
+    <div class="card" data-page="press.html"><div class="ico">📰</div><div class="label">Press Shop</div></div>
+    <div class="card" data-page="sami-store.html"><div class="ico">🏪</div><div class="label">Sami Store</div></div>
+
+    <div class="card" data-page="welding.html"><div class="ico">⚙️</div><div class="label">Welding Shop</div></div>
+    <div class="card" data-page="fgstore.html"><div class="ico">📦</div><div class="label">FG Store</div></div>
+    <div class="card" data-page="reports.html"><div class="ico">📊</div><div class="label">All Reports</div></div>
+
+    <div class="card" data-page="settings.html"><div class="ico">⚙️</div><div class="label">Settings</div></div>
+    <div class="card" data-page="calculator.html"><div class="ico">🧮</div><div class="label">Calculator</div></div>
+    <div class="card" data-page="calendar.html"><div class="ico">📅</div><div class="label">Calendar</div></div>
+  </section>
+
+  <div class="note">Click any folder — you will be asked for folder password. (Any of the 5 allowed passwords will grant access.)</div>
+</main>
+
+<script>
+/*
+  Final dashboard JS:
+  - require that user is logged in (login.html should set localStorage.sapl_logged_in = 'yes')
+  - clicking a folder asks for a password; accepted passwords list below
+  - if valid, redirect to the folder page (data-page). You can replace data-page with your real pages.
+*/
+
+(function(){
+  // allowed passwords (any of these will open any folder)
+  const allowed = ['1234','5678','8901','2345','5679'];
+
+  // check login flag; if not set, redirect to login.html
+  if(!localStorage.getItem('sapl_logged_in')){
+    // keep dashboard accessible? user requested dashboard open normally after login.
+    // This page should only be shown after login, so redirect:
+    window.location.href = 'login.html';
+    return;
+  }
+
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card=>{
+    card.addEventListener('click', ()=> {
+      // ask for password
+      const p = prompt('Enter folder password to open "' + card.querySelector('.label').textContent + '"\n(Enter one of the assigned passwords)');
+      if (p === null) return; // cancelled
+      if(allowed.includes(p.trim())){
+        // access granted — go to the page if exists, otherwise show message
+        const page = card.getAttribute('data-page');
+        if(page){
+          // you can remove the confirm and navigate directly
+          window.location.href = page;
+        } else {
+          alert('Access granted — but no page is configured.');
+        }
+      } else {
+        alert('Wrong password. Access denied.');
+      }
+    });
+  });
+
+  // Refresh button (just reloads)
+  document.getElementById('btnRefresh').addEventListener('click', ()=> location.reload());
+
+  // Logout
+  document.getElementById('btnLogout').addEventListener('click', ()=>{
+    if(confirm('Logout and return to login page?')){
+      localStorage.removeItem('sapl_logged_in');
+      window.location.href = 'login.html';
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
