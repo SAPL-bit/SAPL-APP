@@ -1,215 +1,62 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAPL APP</title>
+<!-- TOP GLASS HEADER -->
+<div class="glass-header">
+    <div class="logo-box">
+        <img src="20251204_141647.jpg" alt="Logo">
+    </div>
+
+    <div class="company-name">
+        SHAHEEN AUTOMOTIVE PVT LTD.
+    </div>
+</div>
 
 <style>
-body {
-    margin: 0; padding: 0;
-    background: #0a0a0a; color: white;
-    font-family: Arial;
-}
-.header {
-    width: 100%; background: #1a1a1a;
-    padding: 12px; display: flex;
-    align-items: center; gap: 12px;
-    border-bottom: 2px solid #333;
-}
-.header img {
-    width: 55px;
-}
-.header-title {
-    font-size: 22px; font-weight: bold;
+/* Glass Header */
+.glass-header {
+    width: 100%;
+    height: 85px;
+    display: flex;
+    align-items: center;
+    backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 10px 25px;
+    gap: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-/* Login Box */
-#loginBox {
-    width: 260px; background: #1a1a1a;
-    margin: 35px auto; padding: 18px;
-    border-radius: 10px; text-align: center;
-    box-shadow: 0 0 8px #000;
+/* Logo Box */
+.logo-box {
+    width: 65px;
+    height: 65px;
+    border-radius: 12px;
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
-select, input {
-    width: 100%; padding: 8px;
-    margin-top: 10px; font-size: 16px;
-}
-button {
-    background: #222; color: white;
-    padding: 8px 14px; border: none;
-    margin-top: 12px; cursor: pointer;
-}
-button:hover { background: #333; }
 
-/* Table */
-table {
-    width: 96%; margin: 20px auto;
-    border-collapse: collapse;
+.logo-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Better fit for real photo */
 }
-th, td {
-    border: 1px solid #555;
-    padding: 8px; text-align: center;
-}
-th { background: #222; }
-.readonly {
-    background: #555 !important;
-    pointer-events: none;
+
+/* Company Name */
+.company-name {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: white;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.20);
 }
 </style>
-</head>
-
-<body>
-
-<!-- HEADER -->
-<div class="header">
-    <img src="logo.png">
-    <div class="header-title">Shaheen Automotive Pvt Ltd</div>
-</div>
-
-<!-- LOGIN SECTION -->
-<div id="loginBox">
-    <h3>Login</h3>
-    <select id="userSelect">
-        <option disabled selected>Select User</option>
-        <option value="kamran">Admin (Kamran)</option>
-        <option value="store">Store</option>
-        <option value="welding">Welding</option>
-        <option value="fg">FG</option>
-        <option value="production">Production</option>
-    </select>
-    <input id="pwdInput" type="password" placeholder="Password">
-    <button id="loginBtn">Login</button>
-</div>
-
-<div id="loggedAs" style="text-align:center; margin-top:10px;"></div>
-<button id="logoutBtn" style="display:none; margin-left:20px;">Logout</button>
-
-<!-- TABLE -->
-<table id="dataTable" style="display:none;">
-    <thead>
-        <tr>
-            <th>Part Name</th>
-            <th>Today Prod</th>
-            <th>Today Pending</th>
-            <th>Remaining</th>
-            <th>Final Done</th>
-            <th>NG</th>
-            <th>Apply Store</th>
-            <th>Apply FG</th>
-        </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-</table>
-
-<script>
-/* USERS */
-let users = [
-    { username:"kamran", password:"c", role:"admin", label:"Admin" },
-    { username:"store", password:"s", role:"store", label:"Store" },
-    { username:"welding", password:"w", role:"welding", label:"Welding" },
-    { username:"fg", password:"f", role:"fg", label:"FG" },
-    { username:"production", password:"p", role:"production", label:"Production" }
-];
-
-let currentUser = null;
-
-/* LOAD OR CREATE SAMPLE DATA */
-let parts = JSON.parse(localStorage.getItem("sapldata") || "[]");
-
-if(parts.length === 0){
-    parts = [
-        { name:"Part-A", tProd:"", tPend:"", rem:"", fDone:"", ng:"", store:"", fg:"" },
-        { name:"Part-B", tProd:"", tPend:"", rem:"", fDone:"", ng:"", store:"", fg:"" }
-    ];
-}
-
-/* SAVE */
-function saveData(){
-    localStorage.setItem("sapldata", JSON.stringify(parts));
-}
-
-/* RENDER TABLE */
-function renderTable(){
-    let tbody = document.getElementById("tbody");
-    tbody.innerHTML = "";
-
-    parts.forEach((p,i)=>{
-        tbody.innerHTML += `
-        <tr>
-            <td>${p.name}</td>
-
-            <td><input data-i="${i}" data-k="tProd" value="${p.tProd}"></td>
-            <td><input data-i="${i}" data-k="tPend" value="${p.tPend}"></td>
-            <td><input data-i="${i}" data-k="rem" value="${p.rem}"></td>
-
-            <td><input data-i="${i}" data-k="fDone" value="${p.fDone}"></td>
-            <td><input data-i="${i}" data-k="ng" value="${p.ng}"></td>
-
-            <td><input data-i="${i}" data-k="store" value="${p.store}"></td>
-            <td><input data-i="${i}" data-k="fg" value="${p.fg}"></td>
-        </tr>`;
-    });
-
-    applyLocks();
-}
-
-/* ROLE BASED LOCKING */
-function applyLocks(){
-    let all = document.querySelectorAll("tbody input");
-    all.forEach(x=>{
-        x.readOnly = false;
-        x.classList.remove("readonly");
-    });
-
-    if(!currentUser) return;
-
-    // Only PRODUCTION ko lock lagana hai
-    if(currentUser.role === "production"){
-        lock("tProd");
-        lock("tPend");
-        lock("rem");
-        // NG, FinalDone, ApplyStore, ApplyFG ACTIVE
-    }
-}
-
-function lock(key){
-    document.querySelectorAll(`input[data-k="${key}"]`).forEach(x=>{
-        x.readOnly = true;
-        x.classList.add("readonly");
-    });
-}
-
-/* AUTO UPDATE */
-document.getElementById("tbody").addEventListener("input", e=>{
-    let i = e.target.dataset.i;
-    let k = e.target.dataset.k;
-    parts[i][k] = e.target.value;
-    saveData();
-});
-
-/* LOGIN */
-loginBtn.addEventListener("click", ()=>{
-    let u = users.find(x => x.username === userSelect.value);
-    if(!u) return alert("User not found");
-
-    if(pwdInput.value !== u.password)
-        return alert("Wrong password");
-
-    currentUser = u;
-
-    loginBox.style.display = "none";
-    dataTable.style.display = "table";
-    logoutBtn.style.display = "inline-block";
-
-    loggedAs.innerHTML = "Logged in as: <b>" + u.label + "</b>";
-
-    renderTable();
-});
-
-/* LOGOUT */
-logoutBtn.addEventListener("click", ()=> location.reload());
-</script>
-
-</body>
-</html>
