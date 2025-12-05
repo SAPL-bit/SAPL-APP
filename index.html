@@ -1,120 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SAPL Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAPL APP</title>
 
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial;
-        background: #0a0a0a;
-        height: 100vh;
-        color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+body {
+    margin: 0; padding: 0;
+    background: #0a0a0a; color: white;
+    font-family: Arial;
+}
+.header {
+    width: 100%; background: #1a1a1a;
+    padding: 12px; display: flex;
+    align-items: center; gap: 12px;
+    border-bottom: 2px solid #333;
+}
+.header img {
+    width: 55px;
+}
+.header-title {
+    font-size: 22px; font-weight: bold;
+}
 
-    .header {
-        width: 100%;
-        background: #1a1a1a;
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        box-sizing: border-box;
-        border-bottom: 2px solid #444;
-    }
+/* Login Box */
+#loginBox {
+    width: 260px; background: #1a1a1a;
+    margin: 35px auto; padding: 18px;
+    border-radius: 10px; text-align: center;
+    box-shadow: 0 0 8px #000;
+}
+select, input {
+    width: 100%; padding: 8px;
+    margin-top: 10px; font-size: 16px;
+}
+button {
+    background: #222; color: white;
+    padding: 8px 14px; border: none;
+    margin-top: 12px; cursor: pointer;
+}
+button:hover { background: #333; }
 
-    .header img {
-        width: 55px;
-        height: auto;
-    }
-
-    .header-title {
-        font-size: 22px;
-        font-weight: bold;
-        color: #fff;
-        letter-spacing: 1px;
-    }
-
-    .login-box {
-        margin-top: 25px;
-        background: #1a1a1a;
-        padding: 20px;
-        border-radius: 10px;
-        width: 260px;
-        box-shadow: 0 0 10px #000;
-    }
-
-    select, input {
-        width: 100%;
-        padding: 8px;
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
-
-    table {
-        margin-top: 20px;
-        border-collapse: collapse;
-        width: 96%;
-        color: white;
-    }
-
-    th, td {
-        border: 1px solid #555;
-        padding: 8px;
-        text-align: center;
-    }
-
-    th {
-        background: #222;
-    }
-
-    .readonly {
-        background: #555 !important;
-        pointer-events: none;
-    }
-
-    button {
-        padding: 8px 12px;
-        background: #222;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin-top: 10px;
-    }
+/* Table */
+table {
+    width: 96%; margin: 20px auto;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #555;
+    padding: 8px; text-align: center;
+}
+th { background: #222; }
+.readonly {
+    background: #555 !important;
+    pointer-events: none;
+}
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
-    <img src="logo.png" />
+    <img src="logo.png">
     <div class="header-title">Shaheen Automotive Pvt Ltd</div>
 </div>
 
-<div class="login-box" id="loginBox">
+<!-- LOGIN SECTION -->
+<div id="loginBox">
     <h3>Login</h3>
     <select id="userSelect">
-        <option value="" disabled selected>Select User</option>
+        <option disabled selected>Select User</option>
         <option value="kamran">Admin (Kamran)</option>
         <option value="store">Store</option>
         <option value="welding">Welding</option>
         <option value="fg">FG</option>
         <option value="production">Production</option>
     </select>
-
-    <input type="password" id="pwdInput" placeholder="Password" />
+    <input id="pwdInput" type="password" placeholder="Password">
     <button id="loginBtn">Login</button>
 </div>
 
-<div id="loggedAs" style="margin-top:10px;"></div>
-<button id="logoutBtn" style="display:none;">Logout</button>
+<div id="loggedAs" style="text-align:center; margin-top:10px;"></div>
+<button id="logoutBtn" style="display:none; margin-left:20px;">Logout</button>
 
+<!-- TABLE -->
 <table id="dataTable" style="display:none;">
     <thead>
         <tr>
@@ -132,6 +103,7 @@
 </table>
 
 <script>
+/* USERS */
 let users = [
     { username:"kamran", password:"c", role:"admin", label:"Admin" },
     { username:"store", password:"s", role:"store", label:"Store" },
@@ -142,6 +114,7 @@ let users = [
 
 let currentUser = null;
 
+/* LOAD OR CREATE SAMPLE DATA */
 let parts = JSON.parse(localStorage.getItem("sapldata") || "[]");
 
 if(parts.length === 0){
@@ -151,18 +124,19 @@ if(parts.length === 0){
     ];
 }
 
+/* SAVE */
 function saveData(){
     localStorage.setItem("sapldata", JSON.stringify(parts));
 }
 
+/* RENDER TABLE */
 function renderTable(){
     let tbody = document.getElementById("tbody");
     tbody.innerHTML = "";
 
     parts.forEach((p,i)=>{
-        let tr = document.createElement("tr");
-
-        tr.innerHTML = `
+        tbody.innerHTML += `
+        <tr>
             <td>${p.name}</td>
 
             <td><input data-i="${i}" data-k="tProd" value="${p.tProd}"></td>
@@ -174,39 +148,39 @@ function renderTable(){
 
             <td><input data-i="${i}" data-k="store" value="${p.store}"></td>
             <td><input data-i="${i}" data-k="fg" value="${p.fg}"></td>
-        `;
-
-        tbody.appendChild(tr);
+        </tr>`;
     });
 
-    applyRoleLock();
+    applyLocks();
 }
 
-function applyRoleLock(){
-    let allInputs = document.querySelectorAll("tbody input");
-
-    allInputs.forEach(inp=>{
-        inp.classList.remove("readonly");
-        inp.readOnly = false;
+/* ROLE BASED LOCKING */
+function applyLocks(){
+    let all = document.querySelectorAll("tbody input");
+    all.forEach(x=>{
+        x.readOnly = false;
+        x.classList.remove("readonly");
     });
 
     if(!currentUser) return;
 
+    // Only PRODUCTION ko lock lagana hai
     if(currentUser.role === "production"){
         lock("tProd");
         lock("tPend");
         lock("rem");
-        // FinalDone, NG, ApplyStore, ApplyFG remain ACTIVE
+        // NG, FinalDone, ApplyStore, ApplyFG ACTIVE
     }
 }
 
-function lock(col){
-    document.querySelectorAll(`input[data-k="${col}"]`).forEach(inp=>{
-        inp.classList.add("readonly");
-        inp.readOnly = true;
+function lock(key){
+    document.querySelectorAll(`input[data-k="${key}"]`).forEach(x=>{
+        x.readOnly = true;
+        x.classList.add("readonly");
     });
 }
 
+/* AUTO UPDATE */
 document.getElementById("tbody").addEventListener("input", e=>{
     let i = e.target.dataset.i;
     let k = e.target.dataset.k;
@@ -214,24 +188,27 @@ document.getElementById("tbody").addEventListener("input", e=>{
     saveData();
 });
 
-document.getElementById("loginBtn").addEventListener("click", ()=>{
-    const u = users.find(x => x.username === userSelect.value);
-
+/* LOGIN */
+loginBtn.addEventListener("click", ()=>{
+    let u = users.find(x => x.username === userSelect.value);
     if(!u) return alert("User not found");
-    if(pwdInput.value !== u.password) return alert("Wrong Password");
+
+    if(pwdInput.value !== u.password)
+        return alert("Wrong password");
 
     currentUser = u;
-    loginBox.style.display="none";
-    dataTable.style.display="table";
-    logoutBtn.style.display="block";
-    loggedAs.textContent = "Logged in as: " + u.label;
+
+    loginBox.style.display = "none";
+    dataTable.style.display = "table";
+    logoutBtn.style.display = "inline-block";
+
+    loggedAs.innerHTML = "Logged in as: <b>" + u.label + "</b>";
 
     renderTable();
 });
 
-document.getElementById("logoutBtn").addEventListener("click", ()=>{
-    location.reload();
-});
+/* LOGOUT */
+logoutBtn.addEventListener("click", ()=> location.reload());
 </script>
 
 </body>
