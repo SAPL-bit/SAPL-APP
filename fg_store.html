@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FG Store</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial;
+        background: #081018;
+        height: 100vh;
+        color: white;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 30px;
+        color: #00eaff;
+        font-size: 32px;
+        letter-spacing: 1px;
+    }
+
+    .container {
+        width: 90%;
+        margin: auto;
+        margin-top: 40px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 25px;
+    }
+
+    .box {
+        background: rgba(255,255,255,0.06);
+        width: 260px;
+        height: 160px;
+        border-radius: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 22px;
+        color: white;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .box:hover {
+        background: rgba(0, 255, 255, 0.15);
+        transform: scale(1.05);
+    }
+
+</style>
+</head>
+
+<body>
+
+<h1>FG STORE</h1>
+
+<div class="container">
+
+    <a href="fg_stock.html" class="box">
+        FG Stock
+    </a>
+
+    <a href="supply.html" class="box">
+        Supply
+    </a>
+
+</div>
+
+</body>
+</html>
