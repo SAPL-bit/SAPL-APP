@@ -102,6 +102,17 @@
         background: #c4ffd4;
         color: #0b6b2b;
     }
+
+    .timer-btn {
+        background: red;
+        color: white;
+        font-weight: bold;
+    }
+
+    .time-box {
+        color: #ffea00;
+        font-weight: bold;
+    }
 </style>
 </head>
 
@@ -129,6 +140,10 @@
             <th>UNDER PACKING</th>
             <th>FINAL PACKING</th>
             <th>PENDING</th>
+
+            <th>TIMER</th>
+            <th>TIME</th>
+
             <th>APPLY DONE</th>
             <th>AUTO DATE</th>
             <th>AUTO TIME</th>
@@ -156,11 +171,15 @@
                 <td></td>
                 <td></td>
 
-                <td contenteditable="false" style="background:#333; opacity:0.5;"></td> <!-- UNDER PACKING LOCKED -->
+                <td contenteditable="false" style="background:#333; opacity:0.5;"></td>
+                <td contenteditable="true"></td>
+                <td contenteditable="false" style="background:#333; opacity:0.5;"></td>
 
-                <td contenteditable="true"></td> <!-- FINAL PACKING Editable -->
+                <td>
+                    <button class="timer-btn" onclick="toggleTimer(this)">Start</button>
+                </td>
 
-                <td contenteditable="false" style="background:#333; opacity:0.5;"></td> <!-- PENDING LOCKED -->
+                <td class="time-box">00:00</td>
 
                 <td><button class="btn-done" onclick="applyAction(this)">Done</button></td>
 
@@ -168,10 +187,50 @@
                 <td class="autoTime"></td>
                 <td class="autoAdmin"></td>
             `;
+
             body.appendChild(row);
         }
     }
     generateRows();
+
+    // ---------------- TIMER FUNCTION ----------------
+
+    function toggleTimer(btn) {
+        let row = btn.closest("tr");
+        let timeBox = row.querySelector(".time-box");
+
+        if (!btn.dataset.seconds) btn.dataset.seconds = 0;
+        if (!btn.dataset.running) btn.dataset.running = "false";
+
+        if (btn.dataset.running === "false") {
+            // START or RESUME
+            btn.dataset.running = "true";
+            btn.style.background = "red"; 
+            btn.innerText = "Hold";
+
+            btn.timer = setInterval(() => {
+                btn.dataset.seconds++;
+                timeBox.innerText = formatTime(btn.dataset.seconds);
+            }, 1000);
+
+        } else {
+            // HOLD (pause)
+            btn.dataset.running = "false";
+            btn.style.background = "yellow";
+            btn.style.color = "black";
+            btn.innerText = "Resume";
+
+            clearInterval(btn.timer);
+        }
+    }
+
+    function formatTime(sec) {
+        let m = String(Math.floor(sec / 60)).padStart(2, '0');
+        let s = String(sec % 60).padStart(2, '0');
+        return `${m}:${s}`;
+    }
+
+    // ---------------- DONE BUTTON ----------------
 
     function applyAction(btn) {
         let row = btn.closest("tr");
@@ -184,6 +243,8 @@
 
         row.querySelector(".autoAdmin").innerText = adminName;
     }
+
+    // ---------------- SEARCH ----------------
 
     document.getElementById("searchInput").addEventListener("keyup", function () {
         let value = this.value.toLowerCase();
