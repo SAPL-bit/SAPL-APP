@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welding Shop</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #081018;
+        font-family: Calibri, sans-serif;
+        color: #fff;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 34px;
+        color: #00eaff;
+        letter-spacing: 1px;
+    }
+
+    .container {
+        width: 90%;
+        margin: auto;
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+    }
+
+    .card {
+        background: rgba(0, 255, 255, 0.08);
+        padding: 35px 20px;
+        border-radius: 18px;
+        text-align: center;
+        transition: 0.3s;
+        border: 1px solid rgba(0,255,255,0.1);
+    }
+
+    .card:hover {
+        background: rgba(0, 255, 255, 0.15);
+        transform: translateY(-5px);
+    }
+
+    .card img {
+        width: 60px;
+        margin-bottom: 15px;
+    }
+
+    .card-title {
+        font-size: 22px;
+        margin-top: 10px;
+        color: #fff;
+    }
+</style>
+
+</head>
+<body>
+
+<h1>WELDING SHOP</h1>
+
+<div class="container">
+
+    <a href="spot_welding/spot.html" class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/1047/1047994.png">
+        <div class="card-title">Spot Welding</div>
+    </a>
+
+    <a href="co2_welding/co2.html" class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/3163/3163383.png">
+        <div class="card-title">CO2 Welding</div>
+    </a>
+
+    <a href="gas_welding/gas.html" class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/743/743131.png">
+        <div class="card-title">Gas Welding</div>
+    </a>
+
+</div>
+
+</body>
+</html>
