@@ -128,6 +128,7 @@
             <th>SAMI STOCK</th>
             <th>UNDER PACKING</th>
             <th>FINAL PACKING</th>
+            <th>PENDING</th>
             <th>APPLY DONE</th>
             <th>AUTO DATE</th>
             <th>AUTO TIME</th>
@@ -154,8 +155,12 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td contenteditable="true"></td>
-                <td contenteditable="true"></td>
+
+                <td contenteditable="false" style="background:#333; opacity:0.5;"></td> <!-- UNDER PACKING LOCKED -->
+
+                <td contenteditable="true"></td> <!-- FINAL PACKING Editable -->
+
+                <td contenteditable="false" style="background:#333; opacity:0.5;"></td> <!-- PENDING LOCKED -->
 
                 <td><button class="btn-done" onclick="applyAction(this)">Done</button></td>
 
