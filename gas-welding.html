@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GAS Welding Sheet</title>
+
+<style>
+    body {
+        font-family: Calibri, sans-serif;
+        background: #081018;
+        padding: 20px;
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    h2 {
+        text-align: center;
+        color: #66eaff;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00eaff99;
+        font-size: 30px;
+    }
+
+    /* TOP REFRESH BUTTON */
+    .top-refresh {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .top-refresh button {
+        padding: 10px 22px;
+        font-size: 17px;
+        background: orange;
+        border: none;
+        color: black;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* SEARCH BOX */
+    .search-box {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .search-box input {
+        width: 95%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 18px;
+    }
+
+    /* TABLE CONTAINER (FULL WIDE) */
+    .table-container {
+        width: 100%;
+        margin: auto;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.05);
+        table-layout: fixed;
+    }
+
+    th {
+        background: #0099cc;
+        color: black;
+        padding: 10px;
+        font-size: 15px;
+        position: sticky;
+        top: 0;
+        text-align: center;
+    }
+
+    td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        text-align: center;
+        font-size: 15px;
+        word-wrap: break-word;
+    }
+
+    td.locked {
+        background: rgba(255,255,255,0.02);
+        color: rgba(255,255,255,0.7);
+        pointer-events: none;
+        user-select: none;
+    }
+
+    td[contenteditable="true"] {
+        background: rgba(255,255,255,0.08);
+        color: white;
+    }
+
+    button {
+        padding: 6px 10px;
+        margin: 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+    }
+
+    .btn-plate {
+        background: #ffdddd;
+        color: #c00000;
+    }
+
+    .btn-fg {
+        background: #ffe5c4;
+        color: #b45f00;
+    }
+</style>
+</head>
+<body>
+
+<h2>GAS Welding</h2>
+
+<!-- TOP REFRESH BUTTON -->
+<div class="top-refresh">
+    <button onclick="location.reload()">REFRESH</button>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by ID, Part No, Part Name...">
+</div>
+
+<!-- TABLE -->
+<div class="table-container">
+<table id="gasTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>PART NO</th>
+            <th>PART NAME</th>
+            <th>PART MODEL</th>
+            <th>FG STOCK</th>
+            <th>SAMI STOCK</th>
+            <th>PLATING STOCK</th>
+            <th>MONTHLY SUPPLY</th>
+            <th>TARGET</th>
+            <th>FINAL DONE</th>
+            <th>NG QTY</th>
+            <th>APPLY PLATING</th>
+            <th>AUTO DATE</th>
+            <th>AUTO TIME</th>
+            <th>ADMIN</th>
+        </tr>
+    </thead>
+
+    <tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<script>
+    const adminName = "1234"; // change if you want different admin
+
+    function generateRows() {
+        const body = document.getElementById("tableBody");
+        for (let i = 1; i <= 500; i++) {
+            const tr = document.createElement('tr');
+
+            tr.innerHTML = `
+                <td class="locked">${i}</td>
+                <td class="locked"></td>
+                <td class="locked"></td>
+                <td class="locked"></td>
+                <td class="locked"></td>
+                <td class="locked"></td>
+                <td class="locked"></td>
+                <td class="locked"></td>
+                <td class="locked"></td>
+
+                <td contenteditable="true"></td>    <!-- FINAL DONE editable -->
+                <td contenteditable="true"></td>    <!-- NG QTY editable -->
+
+                <td><button class="btn-plate" onclick="applyPlating(this)">Apply Plating</button></td>
+
+                <td class="autoDate"></td>
+                <td class="autoTime"></td>
+                <td class="autoAdmin"></td>
+            `;
+            body.appendChild(tr);
+        }
+    }
+
+    generateRows();
+
+    function applyPlating(btn) {
+        const row = btn.closest('tr');
+        const now = new Date();
+        row.querySelector('.autoDate').textContent = now.toLocaleDateString('en-GB');
+        row.querySelector('.autoTime').textContent = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        row.querySelector('.autoAdmin').textContent = adminName;
+    }
+
+    // Search by ID / Part No / Part Name
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        const value = this.value.trim().toLowerCase();
+        const rows = document.querySelectorAll('#gasTable tbody tr');
+
+        rows.forEach(row => {
+            const id = row.children[0].innerText.toLowerCase();
+            const partNo = row.children[1].innerText.toLowerCase();
+            const partName = row.children[2].innerText.toLowerCase();
+
+            if (id.includes(value) || partNo.includes(value) || partName.includes(value)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
