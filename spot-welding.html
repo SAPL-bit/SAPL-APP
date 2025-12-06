@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spot Welding</title>
+
+<style>
+    body {
+        font-family: Calibri, sans-serif;
+        background: #081018;
+        padding: 20px;
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    h2 {
+        text-align: center;
+        color: #66eaff;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px #00eaff99;
+        font-size: 30px;
+    }
+
+    /* Refresh Button */
+    .top-refresh {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .top-refresh button {
+        padding: 10px 22px;
+        font-size: 17px;
+        background: orange;
+        border: none;
+        color: black;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* Search */
+    .search-box {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .search-box input {
+        width: 95%;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        font-size: 18px;
+    }
+
+    /* Table */
+    .table-container {
+        width: 100%;
+        margin: auto;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: rgba(255,255,255,0.05);
+        table-layout: fixed;
+    }
+
+    th {
+        background: #0099cc;
+        color: black;
+        padding: 10px;
+        font-size: 15px;
+        position: sticky;
+        top: 0;
+        text-align: center;
+    }
+
+    td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        text-align: center;
+        font-size: 15px;
+        word-wrap: break-word;
+    }
+
+    /* unlocked cells */
+    td[contenteditable="true"] {
+        background: rgba(255,255,255,0.08);
+        color: white;
+    }
+
+    /* Buttons */
+    button {
+        padding: 6px 10px;
+        margin: 2px;
+        cursor: pointer;
+        border-radius: 5px;
+        border: none;
+        font-weight: bold;
+    }
+
+    .btn-plat { background: #c4e3ff; color:#003b73; }
+    .btn-fg { background: #ffe5c4; color:#b45f00; }
+    .btn-co2 { background: #ffd5d5; color:#a10000; }
+    .btn-gas { background: #e8ffc4; color:#3a6000; }
+</style>
+</head>
+
+<body>
+
+<h2>SPOT WELDING</h2>
+
+<!-- REFRESH BUTTON -->
+<div class="top-refresh">
+    <button onclick="location.reload()">REFRESH</button>
+</div>
+
+<!-- SEARCH -->
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search by ID, Part No, Part Name...">
+</div>
+
+<!-- TABLE -->
+<div class="table-container">
+<table id="spotTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>PART NO</th>
+            <th>PART NAME</th>
+            <th>PART MODEL</th>
+            <th>FG STOCK</th>
+            <th>SAMI STOCK</th>
+            <th>PLATING STOCK</th>
+            <th>MONTHLY SUPPLY</th>
+            <th>TARGET</th>
+
+            <th>FINAL DONE</th>
+            <th>NG QTY</th>
+
+            <th>APPLY PLATING</th>
+            <th>APPLY FG</th>
+            <th>APPLY CO2</th>
+            <th>APPLY GAS</th>
+
+            <th>AUTO DATE</th>
+            <th>AUTO TIME</th>
+            <th>ADMIN</th>
+        </tr>
+    </thead>
+
+    <tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<script>
+    let adminName = "1234";
+
+    function generateRows() {
+        let body = document.getElementById("tableBody");
+
+        for (let i = 1; i <= 500; i++) {
+            let row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${i}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+                <!-- UNLOCKED -->
+                <td contenteditable="true"></td>
+                <td contenteditable="true"></td>
+
+                <!-- BUTTONS -->
+                <td><button class="btn-plat" onclick="apply(this)">Plating</button></td>
+                <td><button class="btn-fg" onclick="apply(this)">FG</button></td>
+                <td><button class="btn-co2" onclick="apply(this)">CO2</button></td>
+                <td><button class="btn-gas" onclick="apply(this)">Gas</button></td>
+
+                <td class="autoDate"></td>
+                <td class="autoTime"></td>
+                <td class="autoAdmin"></td>
+            `;
+            body.appendChild(row);
+        }
+    }
+    generateRows();
+
+    function apply(btn) {
+        let row = btn.closest("tr");
+
+        row.querySelector(".autoDate").innerText =
+            new Date().toLocaleDateString("en-GB");
+
+        row.querySelector(".autoTime").innerText =
+            new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+
+        row.querySelector(".autoAdmin").innerText = adminName;
+    }
+
+    /* SEARCH */
+    document.getElementById("searchInput").addEventListener("keyup", function () {
+        let value = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#spotTable tbody tr");
+
+        rows.forEach(row => {
+            let id = row.children[0].innerText.toLowerCase();
+            let partNo = row.children[1].innerText.toLowerCase();
+            let partName = row.children[2].innerText.toLowerCase();
+
+            row.style.display =
+                (id.includes(value) || partNo.includes(value) || partName.includes(value))
+                ? "" : "none";
+        });
+    });
+</script>
+
+</body>
+</html>
